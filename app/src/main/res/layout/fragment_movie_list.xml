@@ -6,14 +6,8 @@
              tools:context="com.example.a712948.popularmovies.MovieFragment">
 
     <ListView
-            android:id="@android:id/list"
+            android:id="@+id/listview_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
-    <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"/>
 
 </FrameLayout>

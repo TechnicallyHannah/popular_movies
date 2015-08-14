@@ -1,53 +1,44 @@
 package com.example.a712948.popularmovies;
 
-import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.ListView;
 
-
-import com.example.a712948.popularmovies.dummy.DummyContent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
  */
-public class MovieFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class MovieFragment extends Fragment {
 
+    private ArrayAdapter<String> mMovieAdapter;
 
     public MovieFragment() {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        String[] data = {
+                "Happy Gilmore", "Clueless", "Class of 92", "The Martian"
+        };
+        List<String> movieList = new ArrayList<>(Arrays.asList(data));
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        mMovieAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_movie, R.id.list_item_movie_view, movieList);
 
+        View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
+
+        ListView listView = (ListView) view.findViewById(R.id.listview_movies);
+        listView.setAdapter(mMovieAdapter);
         return view;
     }
 }
