@@ -46,7 +46,7 @@ public class MovieFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            RecieveData dataTask = new RecieveData();
+            ReceiveData dataTask = new ReceiveData();
             dataTask.execute();
             return true;
         }
@@ -73,7 +73,7 @@ public class MovieFragment extends Fragment {
     }
 }
 
-class RecieveData extends AsyncTask<Void, Void, Void> {
+class ReceiveData extends AsyncTask<Void, Void, Void> {
     public String LOG = "LOG";
     protected Void doInBackground(Void... params) {
         // Start of getting data back
