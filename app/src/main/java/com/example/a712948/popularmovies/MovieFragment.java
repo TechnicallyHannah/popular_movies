@@ -83,7 +83,7 @@ class ReceiveData extends AsyncTask<Void, Void, Void> {
         String movieString = null;
 
         try {
-            URL url = new URL("http://api.themoviedb.org/3/discover/movie?sorted_by=popularity.asc&api_key=fc47e47a86969055486f846572f8bf83");
+            URL url = new URL("http://api.themoviedb.org/3/discover/movie?sorted_by=popularity.asc&api_key=");
             Log.i(LOG, "GOT URL" + url);
             connection = (HttpURLConnection) url.openConnection();
             Log.i(LOG, "open Connection");
