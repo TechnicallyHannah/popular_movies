@@ -90,10 +90,31 @@ class ReceiveData extends AsyncTask<String, Void, String[]> {
         final String ORG_TITLE = "original_title";
         final String SUMMARY = "overview";
         final String REL_DATE = "release_date";
-        final String VOTE_AVG ="vote_average";
+        final String VOTE_AVG = "vote_average";
 
         JSONObject forecastJson = new JSONObject(movieString);
         JSONArray resultsArray = forecastJson.getJSONArray(RESULTS);
+
+        String[] resultStrs = new String[resultsArray.length()];
+        for (int i = 0; i < resultsArray.length(); i++) {
+            String title;
+            String summary;
+            String release_date;
+            String vote_avg;
+            String poster;
+
+            //gets i within array
+            JSONObject movie = resultsArray.getJSONObject(i);
+            title = movie.getString(ORG_TITLE);
+            summary = movie.getString(ORG_TITLE);
+            release_date = movie.getString(ORG_TITLE);
+            vote_avg = movie.getString(ORG_TITLE);
+            poster = movie.getString(ORG_TITLE);
+
+            resultStrs[i] = title + " - " + summary + " - " + release_date + " - " + vote_avg + " - " + poster;
+
+        }
+        return resultStrs;
     }
 
 
@@ -102,10 +123,8 @@ class ReceiveData extends AsyncTask<String, Void, String[]> {
         // Start of getting data back
         HttpURLConnection connection = null;
         BufferedReader reader = null;
-
         String movieString = null;
         String api = "";
-
 
         try {
 
@@ -119,7 +138,6 @@ class ReceiveData extends AsyncTask<String, Void, String[]> {
                     .build();
 
 
-            //URL url = new URL("http://api.themoviedb.org/3/discover/movie?sorted_by=popularity.asc&api_key=fc47e47a86969055486f846572f8bf83");
             URL url = new URL(builtUri.toString());
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
