@@ -1,14 +1,13 @@
 package com.example.a712948.popularmovies;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.*;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,9 +73,18 @@ public class MovieFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
         ListView listView = (ListView) view.findViewById(R.id.listview_movies);
         listView.setAdapter(mMovieAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String movie = mMovieAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), MovieDetail.class)
+                        .putExtra(Intent.EXTRA_TEXT,movie);
+                startActivity(intent);
+            }
+        });
         return view;
     }
-
 
     class ReceiveData extends AsyncTask<String, Void, String[]> {
         public String LOG = "LOG";
