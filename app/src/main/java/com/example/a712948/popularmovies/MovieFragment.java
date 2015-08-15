@@ -72,113 +72,105 @@ public class MovieFragment extends Fragment {
         mMovieAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_movie, R.id.list_item_movie_view, movieList);
 
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
-        //view = container.getRootView();
-        // Picasso.with(view).load("http://i.imgur.com/DvpvklR.png").into(imageView);
         ListView listView = (ListView) view.findViewById(R.id.listview_movies);
         listView.setAdapter(mMovieAdapter);
         return view;
     }
-}
 
-class ReceiveData extends AsyncTask<String, Void, String[]> {
-    public String LOG = "LOG";
 
-    private String[] getMovieData(String movieString)
-            throws JSONException {
-        final String RESULTS = "results";
-        final String POSTER_PATH = "poster_path";
-        final String ORG_TITLE = "original_title";
-        final String SUMMARY = "overview";
-        final String REL_DATE = "release_date";
-        final String VOTE_AVG = "vote_average";
+    class ReceiveData extends AsyncTask<String, Void, String[]> {
+        public String LOG = "LOG";
 
-        JSONObject forecastJson = new JSONObject(movieString);
-        JSONArray resultsArray = forecastJson.getJSONArray(RESULTS);
+        private String[] getMovieData(String movieString)
+                throws JSONException {
+            final String RESULTS = "results";
+            final String POSTER_PATH = "poster_path";
+            final String ORG_TITLE = "original_title";
+            final String SUMMARY = "overview";
+            final String REL_DATE = "release_date";
+            final String VOTE_AVG = "vote_average";
 
-        String[] resultStrs = new String[resultsArray.length()];
-        for (int i = 0; i < resultsArray.length(); i++) {
-            String title;
-            String summary;
-            String release_date;
-            String vote_avg;
-            String poster;
+            JSONObject forecastJson = new JSONObject(movieString);
+            JSONArray resultsArray = forecastJson.getJSONArray(RESULTS);
 
-            //gets i within array
-            JSONObject movie = resultsArray.getJSONObject(i);
-            title = movie.getString(ORG_TITLE);
-            summary = movie.getString(ORG_TITLE);
-            release_date = movie.getString(ORG_TITLE);
-            vote_avg = movie.getString(ORG_TITLE);
-            poster = movie.getString(ORG_TITLE);
+            String[] resultStrs = new String[resultsArray.length()];
+            for (int i = 0; i < resultsArray.length(); i++) {
+                String title;
+                String summary;
+                String release_date;
+                String vote_avg;
+                String poster;
 
-            resultStrs[i] = title + " - " + summary + " - " + release_date + " - " + vote_avg + " - " + poster;
+                //gets i within array
+                JSONObject movie = resultsArray.getJSONObject(i);
+                title = movie.getString(ORG_TITLE);
+                summary = movie.getString(SUMMARY);
+                release_date = movie.getString(REL_DATE);
+                vote_avg = movie.getString(VOTE_AVG);
+                poster = movie.getString(POSTER_PATH);
 
+                resultStrs[i] = title + " - " + summary + " - " + release_date + " - " + vote_avg + " - " + poster;
+
+            }
+            return resultStrs;
         }
-        return resultStrs;
-    }
 
 
-    @Override
-    protected String[] doInBackground(String... params) {
-        // Start of getting data back
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String movieString = null;
-        String api = "";
+        @Override
+        protected String[] doInBackground(String... params) {
+            // Start of getting data back
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            String movieString = null;
+            String api = "";
 
-        try {
+            try {
 
-            final String BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
-            final String SORTED_PARAM = "sorted_by";
-            final String API_PARAM = "api_key";
+                final String BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
+                final String SORTED_PARAM = "sorted_by";
+                final String API_PARAM = "api_key";
 
-            Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                    .appendQueryParameter(SORTED_PARAM, params[0])
-                    .appendQueryParameter(API_PARAM, api)
-                    .build();
+                Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                        .appendQueryParameter(SORTED_PARAM, params[0])
+                        .appendQueryParameter(API_PARAM, api)
+                        .build();
 
 
-            URL url = new URL(builtUri.toString());
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
-            InputStream inputStream = connection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+                URL url = new URL(builtUri.toString());
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
 
-            if (inputStream == null) {
-                // Nothing to do.
+                if (inputStream == null) {
+                    // Nothing to do.
+                    return null;
+                }
+
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line + "\n");
+                }
+                if (buffer.length() == 0) {
+                    return null;
+                }
+                movieString = buffer.toString();
+            } catch (IOException e) {
+                Log.e(LOG, "Error ", e);
                 return null;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-            movieString = buffer.toString();
-            Log.e(LOG, "movieString" + movieString);
-        } catch (IOException e) {
-            Log.e(LOG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
-            // to parse it.
-            return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG, "Error closing stream", e);
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e(LOG, "Error closing stream", e);
+                    }
                 }
             }
             try {
@@ -187,11 +179,18 @@ class ReceiveData extends AsyncTask<String, Void, String[]> {
                 Log.e(LOG, e.getMessage(), e);
                 e.printStackTrace();
             }
-
-            // This will only happen if there was an error getting or parsing the forecast.
+            // This will only happen if there was an error getting or parsing the data.
             return null;
         }
 
+        @Override
+        protected void onPostExecute(String[] results) {
+            if (results != null) {
+                mMovieAdapter.clear();
+                for (String movieResults : results) {
+                    mMovieAdapter.add(movieResults);
+                }
+            }
+        }
     }
 }
-
