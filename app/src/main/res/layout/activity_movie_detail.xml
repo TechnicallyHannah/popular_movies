@@ -9,7 +9,7 @@
                 tools:context="com.example.a712948.popularmovies.MovieDetail">
 
     <TextView
-            android:text="@string/hello_world"
+            android:id="@+id/single_movie_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

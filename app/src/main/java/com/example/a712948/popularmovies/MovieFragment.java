@@ -130,7 +130,7 @@ public class MovieFragment extends Fragment {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             String movieString = null;
-            String api = "";
+            String api = "fc47e47a86969055486f846572f8bf83";
 
             try {
 

@@ -1,9 +1,11 @@
 package com.example.a712948.popularmovies;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.view.*;
+import android.widget.TextView;
 
 
 public class MovieDetail extends ActionBarActivity {
@@ -34,5 +36,25 @@ public class MovieDetail extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class MovieDetailFragment extends Fragment {
+        public MovieDetailFragment() {
+
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.activity_movie_detail, container, false);
+
+            Intent intent = getActivity().getIntent();
+            if (intent != null) {
+                String singleMovie = intent.getStringExtra(intent.EXTRA_TEXT);
+                ((TextView) rootView.findViewById(R.id.single_movie_detail)).setText(singleMovie);
+            }
+            return rootView;
+        }
     }
 }
