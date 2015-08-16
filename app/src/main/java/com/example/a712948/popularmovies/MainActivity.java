@@ -14,7 +14,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().add(R.id.container, new MovieFragment()).commit();
 //        Context context = getApplicationContext();
-  //      ImageView imageView = (ImageView) findViewById(R.id.imageView);
+       // ImageView imageView = (ImageView) findViewById(R.id.imageView);
     //    Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
     }
 

@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.*;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,8 +22,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -50,11 +51,6 @@ public class MovieFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            ReceiveData dataTask = new ReceiveData();
-            dataTask.execute("popularity.asc");
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -62,13 +58,10 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ImageView imageView = (ImageView) container.findViewById(R.id.imageView);
-        String[] data = {
-                "Happy Gilmore", "Clueless", "Class of 92", "The Martian"
-        };
 
-        List<String> movieList = new ArrayList<>(Arrays.asList(data));
+        updateMovies();
 
-        mMovieAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_movie, R.id.list_item_movie_view, movieList);
+        mMovieAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_movie, R.id.list_item_movie_view, new ArrayList<String>());
 
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
         ListView listView = (ListView) view.findViewById(R.id.listview_movies);
@@ -79,12 +72,19 @@ public class MovieFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String movie = mMovieAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), MovieDetail.class)
-                        .putExtra(Intent.EXTRA_TEXT,movie);
+                        .putExtra(Intent.EXTRA_TEXT, movie);
                 startActivity(intent);
             }
         });
         return view;
     }
+
+    private void updateMovies() {
+        ReceiveData dataTask = new ReceiveData();
+        dataTask.execute("popularity.asc");
+
+    }
+
 
     class ReceiveData extends AsyncTask<String, Void, String[]> {
         public String LOG = "LOG";
@@ -130,7 +130,7 @@ public class MovieFragment extends Fragment {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             String movieString = null;
-            String api = "";
+            String api = "fc47e47a86969055486f846572f8bf83";
 
             try {
 
