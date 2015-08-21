@@ -1,27 +1,28 @@
 package com.example.a712948.popularmovies;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MovieDetailActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, new MovieFragment()).commit();
-//        Context context = getApplicationContext();
-       // ImageView imageView = (ImageView) findViewById(R.id.imageView);
-    //    Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+        setContentView(R.layout.activity_movie_detail);
+
+        if(savedInstanceState != null){
+            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_fragment,new MovieFragment()).commit();
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
         return true;
     }
 
