@@ -1,14 +1,11 @@
 package com.example.a712948.popularmovies;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,10 +14,18 @@ import java.util.ArrayList;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  */
-public class MovieFragment extends Fragment {
-    private ArrayAdapter<Movie> mMovieAdapter;
+public class MovieActivity extends Fragment {
+    private MovieAdapter mMovieAdapter;
+    private Movie mMovie;
 
-    public MovieFragment() {
+    private final String MOVIE_TITLE = "MOVIE_TITLE";
+    private final String MOVIE_REL = "MOVIE_REL";
+    private final String MOVIE_SUM = "MOVIE_SUM";
+    private final String MOVIE_RATE = "MOVIE_RATE";
+    private final String MOVIE_POSTER = "MOVIE_POSTER";
+    final String TAG = "Tag";
+
+    public MovieActivity() {
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -46,34 +51,34 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ImageView imageView = (ImageView) container.findViewById(R.id.imageView);
 
         updateMovies();
-        final String TAG = "Tag";
-
-        mMovieAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_movie, R.id.list_item_movie_view, new ArrayList<Movie>());
-
+        mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
         ListView listView = (ListView) view.findViewById(R.id.listview_movies);
         listView.setAdapter(mMovieAdapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie movie = (Movie) adapterView.getItemAtPosition(position);
-                Intent intent = new Intent(getActivity(), MovieDetail.class)
-                        .putExtra(Intent.EXTRA_TEXT, movie.title);
-                Log.i(TAG,movie.title);
-                Log.i(TAG,movie.summary);
-                Log.i(TAG,movie.release_date);
-                startActivity(intent);
+                Toast.makeText(view.getContext(), "you clicked "+movie.title,
+                        Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(getActivity(), MovieDetail.class);
+ //               intent.putExtra("MOVIE_TITLE", movie.title);
+   //             intent.putExtra("MOVIE_SUM", movie.summary);
+     //           intent.putExtra("MOVIE_RATE", movie.vote_avg);
+       //         intent.putExtra("MOVIE_REL", movie.release_date);
+         //       intent.putExtra("MOVIE_POSTER", movie.poster);
+           //     startActivity(intent);
             }
         });
         return view;
     }
 
     private void updateMovies() {
-        ServiceHandler dataTask = new ServiceHandler(getActivity(),mMovieAdapter);
+        ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
         dataTask.execute("popularity.asc");
     }
 
@@ -82,4 +87,5 @@ public class MovieFragment extends Fragment {
         super.onStart();
         updateMovies();
     }
+
 }

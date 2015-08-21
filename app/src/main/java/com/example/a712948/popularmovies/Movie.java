@@ -8,12 +8,24 @@ import android.os.Parcelable;
  * @since 8/20/15.
  */
 public class Movie implements Parcelable {
+
     String title;
     String summary;
     String release_date;
     String vote_avg;
     String poster;
     String TAG = "TAG";
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+    public String getTitle() {
+        return title;
+    }
 
     public Movie(String title, String summary, String release_date, String vote_avg, String poster) {
         this.title = title;
