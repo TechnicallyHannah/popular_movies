@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -64,14 +63,12 @@ public class MovieFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie movie = (Movie) adapterView.getItemAtPosition(position);
-                Toast.makeText(view.getContext(), "you clicked "+movie.title,
-                        Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
                 intent.putExtra(Intent.EXTRA_TEXT, movie.title);
-   //             intent.putExtra("MOVIE_SUM", movie.summary);
-     //           intent.putExtra("MOVIE_RATE", movie.vote_avg);
-       //         intent.putExtra("MOVIE_REL", movie.release_date);
-         //       intent.putExtra("MOVIE_POSTER", movie.poster);
+                intent.putExtra("MOVIE_SUM", movie.summary);
+                intent.putExtra("MOVIE_RATE", movie.vote_avg);
+                intent.putExtra("MOVIE_REL", movie.release_date);
+                intent.putExtra("MOVIE_POSTER", movie.poster);
                 startActivity(intent);
             }
         });

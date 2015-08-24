@@ -9,7 +9,4 @@
              tools:context=".MainActivity"
              android:id="@+id/container">
 
-    <ImageView android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-            android:id="@+id/imageView"/>
-    </FrameLayout>
+</FrameLayout>

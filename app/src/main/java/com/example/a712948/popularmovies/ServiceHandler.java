@@ -26,6 +26,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     private ArrayAdapter<Movie> mMovieAdapter;
     private final Context mContext;
+    private String[] posterPath;
 
     public ServiceHandler(Context context, ArrayAdapter<Movie> movieAdapter) {
         mContext = context;
@@ -47,7 +48,6 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
         JSONObject movieJson = new JSONObject(movieString);
         JSONArray resultsArray = movieJson.getJSONArray(RESULTS);
 
-        String[] resultStrs = new String[resultsArray.length()];
         for (int i = 0; i < resultsArray.length(); i++) {
             String title;
             String summary;
