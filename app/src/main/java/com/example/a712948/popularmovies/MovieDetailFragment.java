@@ -32,10 +32,12 @@ public class MovieDetailFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         String poster = intent.getStringExtra(MOVIE_POSTER);
         String movie_title = intent.getStringExtra(MOVIE_TITLE);
-        ((TextView) view.findViewById(R.id.movie_title_text)).setText(movie_title);
-        ((TextView) view.findViewById(R.id.movie_summary_text)).setText(intent.getStringExtra(MOVIE_SUM));
-        ((TextView) view.findViewById(R.id.movie_release_date)).setText(intent.getStringExtra(MOVIE_REL));
-        ImageView posterView = ((ImageView)view.findViewById(R.id.movie_poster));
+
+        ((MovieDetailActivity) getActivity()).setActionBarTitle(movie_title);
+        ((TextView) view.findViewById(R.id.movie_summary_text)).setText("Move Summary : " + intent.getStringExtra(MOVIE_SUM));
+        ((TextView) view.findViewById(R.id.movie_release_date)).setText("Move Release Date : " + intent.getStringExtra(MOVIE_REL));
+        ((TextView) view.findViewById(R.id.movie_rate_text)).setText("Move Rating : " + intent.getStringExtra(MOVIE_RATE));
+        ImageView posterView = ((ImageView) view.findViewById(R.id.movie_poster));
         Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w185/" + poster).into(posterView);
 
         return view;
