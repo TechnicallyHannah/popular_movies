@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.*;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import java.util.ArrayList;
 
@@ -51,14 +51,12 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        updateMovies();
         mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
-        View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.listview_movies);
-        listView.setAdapter(mMovieAdapter);
+        View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
+        GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
+        gridView.setAdapter(mMovieAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
