@@ -31,12 +31,10 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
             poster = movie.poster;
         }
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.list_item_movie, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.fragment_movie_grid, parent, false);
         }
-
-        ImageView posterView = (ImageView) view.findViewById(R.id.list_item_movie_view);
-        Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + poster).into(posterView);
-
+        ImageView posterView = (ImageView) view.findViewById(R.id.image_holder);
+        Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + poster).into(posterView);
         return view;
     }
 }

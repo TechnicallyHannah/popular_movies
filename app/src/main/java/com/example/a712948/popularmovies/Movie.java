@@ -20,9 +20,6 @@ public class Movie implements Parcelable {
         return poster;
     }
 
-    public void setPoster(String poster) {
-        this.poster = poster;
-    }
     public String getTitle() {
         return title;
     }

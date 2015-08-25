@@ -6,13 +6,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailFragment extends Fragment {
+
+    private final String MOVIE_TITLE = "MOVIE_TITLE";
+    private final String MOVIE_REL = "MOVIE_REL";
+    private final String MOVIE_SUM = "MOVIE_SUM";
+    private final String MOVIE_RATE = "MOVIE_RATE";
+    private final String MOVIE_POSTER = "MOVIE_POSTER";
 
     public MovieDetailFragment() {
     }
@@ -22,8 +30,16 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         Intent intent = getActivity().getIntent();
-        String movie_title = intent.getStringExtra(Intent.EXTRA_TEXT);
-        ((TextView) view.findViewById(R.id.movie_title_text)).setText(movie_title);
+        String poster = intent.getStringExtra(MOVIE_POSTER);
+        String movie_title = intent.getStringExtra(MOVIE_TITLE);
+
+        ((MovieDetailActivity) getActivity()).setActionBarTitle(movie_title);
+        ((TextView) view.findViewById(R.id.movie_summary_text)).setText("Move Summary : " + intent.getStringExtra(MOVIE_SUM));
+        ((TextView) view.findViewById(R.id.movie_release_date)).setText("Move Release Date : " + intent.getStringExtra(MOVIE_REL));
+        ((TextView) view.findViewById(R.id.movie_rate_text)).setText("Move Rating : " + intent.getStringExtra(MOVIE_RATE));
+        ImageView posterView = ((ImageView) view.findViewById(R.id.movie_poster));
+        Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w185/" + poster).into(posterView);
+
         return view;
     }
 }
