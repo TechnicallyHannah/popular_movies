@@ -3,6 +3,7 @@ package com.example.a712948.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -62,7 +63,8 @@ public class MovieFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie movie = (Movie) adapterView.getItemAtPosition(position);
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                intent.putExtra(Intent.EXTRA_TEXT, movie.title);
+                Log.i("Tag", movie.title);
+                intent.putExtra("MOVIE_TITLE", movie.title);
                 intent.putExtra("MOVIE_SUM", movie.summary);
                 intent.putExtra("MOVIE_RATE", movie.vote_avg);
                 intent.putExtra("MOVIE_REL", movie.release_date);
@@ -74,6 +76,11 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateMovies() {
+        ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
+        dataTask.execute("popularity.asc");
+    }
+
+    private void updateMoviesHighRate() {
         ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
         dataTask.execute("popularity.asc");
     }

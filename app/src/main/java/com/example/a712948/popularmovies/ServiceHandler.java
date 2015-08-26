@@ -59,7 +59,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
             JSONObject movie = resultsArray.getJSONObject(i);
             title = movie.getString(ORG_TITLE);
             summary = movie.getString(SUMMARY);
-            release_date = movie.getString(REL_DATE);
+            release_date = getDate(movie.getString(REL_DATE));
             vote_avg = movie.getString(VOTE_AVG);
             poster = movie.getString(POSTER_PATH);
 
@@ -69,6 +69,53 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
         return movies;
     }
 
+    private String getDate(String str){
+        String[] strings = str.split("-");
+        String month = strings[1];
+        String day = strings[2];
+        String year = strings[0];
+        switch (month){
+            case "01":
+                month = "January";
+                break;
+            case "02":
+                month = "February";
+                break;
+            case "03":
+                month = "March";
+                break;
+            case "04":
+                month = "April";
+                break;
+            case "05":
+                month = "May";
+                break;
+            case "06":
+                month = "June";
+                break;
+            case "07":
+                month = "July";
+                break;
+            case "08":
+                month = "August";
+                break;
+            case "09":
+                month = "September";
+                break;
+            case "10":
+                month = "October";
+                break;
+            case "11":
+                month = "November";
+                break;
+            case "12":
+                month = "December";
+                break;
+        }
+        String date = month+" "+day+" "+year;
+        Log.i("DATE", date);
+        return date;
+    }
 
     @Override
     protected ArrayList<Movie> doInBackground(String... params) {
