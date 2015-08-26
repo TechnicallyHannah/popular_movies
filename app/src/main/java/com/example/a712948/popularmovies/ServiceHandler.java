@@ -26,7 +26,6 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     private ArrayAdapter<Movie> mMovieAdapter;
     private final Context mContext;
-    private String[] posterPath;
 
     public ServiceHandler(Context context, ArrayAdapter<Movie> movieAdapter) {
         mContext = context;

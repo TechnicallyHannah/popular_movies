@@ -32,6 +32,9 @@ public class MovieFragment extends Fragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            return;
+        }
         // Add this line in order for this fragment to handle menu events.
         this.setRetainInstance(true);
         setHasOptionsMenu(true);
@@ -39,7 +42,7 @@ public class MovieFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.data_fragment, menu);
+            inflater.inflate(R.menu.menu_main, menu);
     }
 
     @Override
