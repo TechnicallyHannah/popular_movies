@@ -21,6 +21,7 @@ public class MovieFragment extends Fragment {
 
     private final String MOVIE_TITLE = "MOVIE_TITLE";
     private final String MOVIE_REL = "MOVIE_REL";
+    private final String MOVIE_STATE = "MOVIE_STATE";
     private final String MOVIE_SUM = "MOVIE_SUM";
     private final String MOVIE_RATE = "MOVIE_RATE";
     private final String MOVIE_POSTER = "MOVIE_POSTER";
@@ -32,6 +33,7 @@ public class MovieFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
+        this.setRetainInstance(true);
         setHasOptionsMenu(true);
     }
 
@@ -52,6 +54,7 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
         View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
@@ -71,9 +74,11 @@ public class MovieFragment extends Fragment {
                 intent.putExtra("MOVIE_POSTER", movie.poster);
                 startActivity(intent);
             }
+
         });
         return view;
     }
+
 
     private void updateMovies() {
         ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
@@ -87,8 +92,15 @@ public class MovieFragment extends Fragment {
 
     @Override
     public void onStart() {
-        super.onStart();
+        Log.i("In on start", "omg");
         updateMovies();
+        super.onStart();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+      //  onSaveInstanceState();
     }
 
 }
