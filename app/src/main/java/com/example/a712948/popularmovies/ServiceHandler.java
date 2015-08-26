@@ -125,7 +125,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
         String movieString = null;
-        String api = "fc47e47a86969055486f846572f8bf83";
+        String api = "";
 
         try {
 
