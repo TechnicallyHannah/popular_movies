@@ -48,6 +48,9 @@ public class MovieFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if(id == R.id.action_toprate){
+            updateMoviesHighRate();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -87,7 +90,7 @@ public class MovieFragment extends Fragment {
 
     private void updateMoviesHighRate() {
         ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
-        dataTask.execute("popularity.asc");
+        dataTask.execute("vote_average.asc");
     }
 
     @Override
