@@ -71,12 +71,12 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
         return movies;
     }
 
-    private String getDate(String str){
+    private String getDate(String str) {
         String[] strings = str.split("-");
         String month = strings[1];
         String day = strings[2];
         String year = strings[0];
-        switch (month){
+        switch (month) {
             case "01":
                 month = "January";
                 break;
@@ -114,7 +114,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
                 month = "December";
                 break;
         }
-        String date = month+" "+day+" "+year;
+        String date = month + " " + day + " " + year;
         Log.i("DATE", date);
         return date;
     }

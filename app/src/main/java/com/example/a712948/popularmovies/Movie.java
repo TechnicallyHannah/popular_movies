@@ -15,7 +15,6 @@ public class Movie implements Parcelable {
     String vote_avg;
     String poster;
     String movieID;
-    String TAG = "TAG";
 
     public Movie(String movieID, String title, String summary, String release_date, String vote_avg, String poster) {
         this.movieID = movieID;

@@ -3,7 +3,6 @@ package com.example.a712948.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ public class MovieDetailFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         String poster = intent.getStringExtra(MOVIE_POSTER);
         String movie_title = intent.getStringExtra(MOVIE_TITLE);
-        Log.i("TAG", intent.getStringExtra(MOVIE_RATE));
         ((TextView) view.findViewById(R.id.movie_title_text)).setText(movie_title);
         ((TextView) view.findViewById(R.id.movie_summary_text)).setText("Summary : " + intent.getStringExtra(MOVIE_SUM));
         ((TextView) view.findViewById(R.id.movie_release_date)).setText("Release Date : " + intent.getStringExtra(MOVIE_REL));

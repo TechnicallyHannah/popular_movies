@@ -17,15 +17,6 @@ import java.util.ArrayList;
  */
 public class MovieFragment extends Fragment {
     private MovieAdapter mMovieAdapter;
-    private Movie mMovie;
-
-    private final String MOVIE_TITLE = "MOVIE_TITLE";
-    private final String MOVIE_REL = "MOVIE_REL";
-    private final String MOVIE_STATE = "MOVIE_STATE";
-    private final String MOVIE_SUM = "MOVIE_SUM";
-    private final String MOVIE_RATE = "MOVIE_RATE";
-    private final String MOVIE_POSTER = "MOVIE_POSTER";
-    final String TAG = "Tag";
 
     public MovieFragment() {
     }
@@ -42,7 +33,7 @@ public class MovieFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_main, menu);
     }
 
     @Override
@@ -51,7 +42,7 @@ public class MovieFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(id == R.id.action_toprate){
+        if (id == R.id.action_toprate) {
             updateMoviesHighRate();
         }
         return super.onOptionsItemSelected(item);
@@ -98,7 +89,6 @@ public class MovieFragment extends Fragment {
 
     @Override
     public void onStart() {
-        Log.i("In on start", "omg");
         updateMovies();
         super.onStart();
     }
@@ -106,7 +96,6 @@ public class MovieFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-      //  onSaveInstanceState();
     }
 
 }
