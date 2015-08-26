@@ -42,6 +42,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
         final String SUMMARY = "overview";
         final String REL_DATE = "release_date";
         final String VOTE_AVG = "vote_average";
+        final String MOVIE_ID = "id";
 
         ArrayList<Movie> movies = new ArrayList<>();
         JSONObject movieJson = new JSONObject(movieString);
@@ -53,16 +54,18 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
             String release_date;
             String vote_avg;
             String poster;
+            String movie_id;
 
             //gets i within array
             JSONObject movie = resultsArray.getJSONObject(i);
+            movie_id = movie.getString(MOVIE_ID);
             title = movie.getString(ORG_TITLE);
             summary = movie.getString(SUMMARY);
             release_date = getDate(movie.getString(REL_DATE));
             vote_avg = movie.getString(VOTE_AVG);
             poster = movie.getString(POSTER_PATH);
 
-            movies.add(new Movie(title, summary, release_date, vote_avg, poster));
+            movies.add(new Movie(movie_id, title, summary, release_date, vote_avg, poster));
 
         }
         return movies;
