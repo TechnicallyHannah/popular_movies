@@ -10,13 +10,13 @@ public class MovieDetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-
         if(savedInstanceState != null){
-            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_fragment,new MovieFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_fragment,new MovieDetailFragment()).commit();
         }
     }
-    public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 }

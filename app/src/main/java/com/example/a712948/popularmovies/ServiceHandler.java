@@ -26,7 +26,6 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     private ArrayAdapter<Movie> mMovieAdapter;
     private final Context mContext;
-    private String[] posterPath;
 
     public ServiceHandler(Context context, ArrayAdapter<Movie> movieAdapter) {
         mContext = context;
@@ -43,6 +42,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
         final String SUMMARY = "overview";
         final String REL_DATE = "release_date";
         final String VOTE_AVG = "vote_average";
+        final String MOVIE_ID = "id";
 
         ArrayList<Movie> movies = new ArrayList<>();
         JSONObject movieJson = new JSONObject(movieString);
@@ -54,21 +54,70 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
             String release_date;
             String vote_avg;
             String poster;
+            String movie_id;
 
             //gets i within array
             JSONObject movie = resultsArray.getJSONObject(i);
+            movie_id = movie.getString(MOVIE_ID);
             title = movie.getString(ORG_TITLE);
             summary = movie.getString(SUMMARY);
-            release_date = movie.getString(REL_DATE);
+            release_date = getDate(movie.getString(REL_DATE));
             vote_avg = movie.getString(VOTE_AVG);
             poster = movie.getString(POSTER_PATH);
 
-            movies.add(new Movie(title, summary, release_date, vote_avg, poster));
+            movies.add(new Movie(movie_id, title, summary, release_date, vote_avg, poster));
 
         }
         return movies;
     }
 
+    private String getDate(String str){
+        String[] strings = str.split("-");
+        String month = strings[1];
+        String day = strings[2];
+        String year = strings[0];
+        switch (month){
+            case "01":
+                month = "January";
+                break;
+            case "02":
+                month = "February";
+                break;
+            case "03":
+                month = "March";
+                break;
+            case "04":
+                month = "April";
+                break;
+            case "05":
+                month = "May";
+                break;
+            case "06":
+                month = "June";
+                break;
+            case "07":
+                month = "July";
+                break;
+            case "08":
+                month = "August";
+                break;
+            case "09":
+                month = "September";
+                break;
+            case "10":
+                month = "October";
+                break;
+            case "11":
+                month = "November";
+                break;
+            case "12":
+                month = "December";
+                break;
+        }
+        String date = month+" "+day+" "+year;
+        Log.i("DATE", date);
+        return date;
+    }
 
     @Override
     protected ArrayList<Movie> doInBackground(String... params) {
