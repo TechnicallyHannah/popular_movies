@@ -22,7 +22,8 @@
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"/>
+                    android:paddingTop="16dp"
+                    android:backgroundTint="@color/teal"/>
 
             <ImageView
                     android:id="@+id/movie_poster"

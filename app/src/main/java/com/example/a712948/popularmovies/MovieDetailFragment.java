@@ -34,7 +34,10 @@ public class MovieDetailFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         String poster = intent.getStringExtra(MOVIE_POSTER);
         String movie_title = intent.getStringExtra(MOVIE_TITLE);
-        ((TextView) view.findViewById(R.id.movie_title_text)).setText(movie_title);
+        TextView movieTitle = (TextView) view.findViewById(R.id.movie_title_text);
+        movieTitle.setText(movie_title);
+        movieTitle.setBackgroundColor(R.color.teal);
+
         ((TextView) view.findViewById(R.id.movie_summary_text)).setText("Summary : " + intent.getStringExtra(MOVIE_SUM));
         ((TextView) view.findViewById(R.id.movie_release_date)).setText("Release Date : " + intent.getStringExtra(MOVIE_REL));
         ((TextView) view.findViewById(R.id.movie_rate_text)).setText("Rating : " + intent.getStringExtra(MOVIE_RATE));

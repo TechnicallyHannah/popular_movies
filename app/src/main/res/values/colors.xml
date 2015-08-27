@@ -3,5 +3,8 @@
     <item name="black"
           type="color">#000
     </item>
+    <item name="teal"
+          type="color">#008080
+    </item>
 
 </resources>
