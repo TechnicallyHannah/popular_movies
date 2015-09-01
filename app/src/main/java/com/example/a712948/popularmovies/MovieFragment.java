@@ -49,7 +49,7 @@ public class MovieFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
@@ -69,6 +69,7 @@ public class MovieFragment extends Fragment {
                 intent.putExtra("MOVIE_RATE", movie.vote_avg);
                 intent.putExtra("MOVIE_REL", movie.release_date);
                 intent.putExtra("MOVIE_POSTER", movie.poster);
+                intent.putExtra("MOVIE_ID", movie.movieID);
                 startActivity(intent);
             }
 

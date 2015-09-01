@@ -16,6 +16,11 @@ public class MovieDetailActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onStart(){
+
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
     }

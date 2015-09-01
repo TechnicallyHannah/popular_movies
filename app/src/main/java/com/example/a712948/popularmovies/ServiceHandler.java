@@ -177,6 +177,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
             }
         }
         try {
+            Log.i("tag", params[0]);
             return getMovieData(movieString);
         } catch (JSONException e) {
             Log.e(LOG, e.getMessage(), e);
@@ -184,6 +185,7 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList<Movie>> {
         }
         return null;
     }
+
 
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {

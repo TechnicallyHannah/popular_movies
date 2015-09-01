@@ -13,4 +13,9 @@ public class MainActivity extends ActionBarActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.container, new MovieFragment()).commit();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 }
