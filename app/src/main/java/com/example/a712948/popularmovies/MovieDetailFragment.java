@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 
 /**
@@ -31,37 +31,40 @@ public class MovieDetailFragment extends Fragment {
     public MovieDetailFragment() {
     }
 
+    @InjectView(R.id.movie_title_text)
+    TextView title_text_view;
+    @InjectView(R.id.movie_summary_text)
+    TextView summary_text_view;
+    @InjectView(R.id.movie_release_date)
+    TextView release_text_view;
+    @InjectView(R.id.movie_rate_text)
+    TextView rate_text_view;
+    @InjectView(R.id.movie_poster)
+    ImageView poster_view;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         this.setRetainInstance(true);
-
-        View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_movie_detail, null);
+        ButterKnife.inject(this, view);
         Intent intent = getActivity().getIntent();
         String movieID = intent.getStringExtra(MOVIE_ID);
         Log.i("MOVIE ID ", movieID);
         String poster = intent.getStringExtra(MOVIE_POSTER);
         String movie_title = intent.getStringExtra(MOVIE_TITLE);
-        TextView movieTitle = (TextView) view.findViewById(R.id.movie_title_text);
-        movieTitle.setText(movie_title);
-        movieTitle.setBackgroundColor(getResources().getColor(R.color.teal));
+        String movie_summary = intent.getStringExtra(MOVIE_SUM);
+        String movie_release = intent.getStringExtra(MOVIE_REL);
+        String movie_rate = intent.getStringExtra(MOVIE_RATE);
+        title_text_view.setText(movie_title);
+        summary_text_view.setText(movie_summary);
+        release_text_view.setText(movie_release);
+        rate_text_view.setText(movie_rate);
 
-        ((TextView) view.findViewById(R.id.movie_summary_text)).setText("Summary : " + intent.getStringExtra(MOVIE_SUM));
-        ((TextView) view.findViewById(R.id.movie_release_date)).setText("Release Date : " + intent.getStringExtra(MOVIE_REL));
-        ((TextView) view.findViewById(R.id.movie_rate_text)).setText("Rating : " + intent.getStringExtra(MOVIE_RATE));
-        ImageView posterView = ((ImageView) view.findViewById(R.id.movie_poster));
-        Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(posterView);
-
-        mMovieTrailerAdapter = new MovieTrailerAdapter(getActivity(), new ArrayList<MovieTrailer>());
-       // ListView trailerView = (ListView) view.findViewById(R.id.movie_trailer_view);
+        Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(poster_view);
 
         return view;
-    }
-    @Override
-    public void onStart(){
-        MovieTrailerHandler movieTrailerHandler = new MovieTrailerHandler(getActivity(), mMovieTrailerAdapter);
-        movieTrailerHandler.execute(movieID);
     }
 }

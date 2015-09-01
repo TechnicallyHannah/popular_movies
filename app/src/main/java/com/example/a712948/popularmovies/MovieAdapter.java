@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.List;
  * @since 8/20/15.
  */
 public class MovieAdapter extends ArrayAdapter<Movie> {
+
+    @InjectView(R.id.movie_poster)
+    ImageView poster_view;
 
 
     public MovieAdapter(Activity context, List<Movie> movies) {
@@ -33,8 +37,8 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.fragment_movie_grid, parent, false);
         }
-        ImageView posterView = (ImageView) view.findViewById(R.id.image_holder);
-        Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + poster).into(posterView);
+        ImageView poster_view = (ImageView) view.findViewById(R.id.image_holder);
+        Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + poster).into(poster_view);
         return view;
     }
 }
