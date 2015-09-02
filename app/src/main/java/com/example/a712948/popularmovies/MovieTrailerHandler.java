@@ -26,12 +26,12 @@ public class MovieTrailerHandler extends AsyncTask<String, Void, ArrayList<Movie
 
     public String LOG = "LOG";
 
-    private ArrayAdapter<MovieTrailer> mMovieTrailerArrayAdapter;
+    private ArrayAdapter<MovieTrailer> mTrailerArrayAdapter;
     private final Context mContext;
 
     public MovieTrailerHandler(Context context, ArrayAdapter<MovieTrailer> trailerAdapter) {
         mContext = context;
-        mMovieTrailerArrayAdapter = trailerAdapter;
+        mTrailerArrayAdapter = trailerAdapter;
     }
 
 
@@ -135,10 +135,9 @@ public class MovieTrailerHandler extends AsyncTask<String, Void, ArrayList<Movie
 
     @Override
     protected void onPostExecute(ArrayList<MovieTrailer> movies) {
-        if (movies != null && mMovieTrailerArrayAdapter != null) {
-            mMovieTrailerArrayAdapter.clear();
-            mMovieTrailerArrayAdapter.addAll(movies);
+        if (movies != null && mTrailerArrayAdapter != null) {
+            mTrailerArrayAdapter.clear();
+            mTrailerArrayAdapter.addAll(movies);
         }
     }
 }
-

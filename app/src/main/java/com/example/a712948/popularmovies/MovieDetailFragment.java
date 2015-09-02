@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 
 /**
@@ -19,6 +22,7 @@ import com.squareup.picasso.Picasso;
  */
 public class MovieDetailFragment extends Fragment {
     private MovieTrailerAdapter mMovieTrailerAdapter;
+    private MovieTrailerHandler mMovieTrailerHandler;
 
     private final String MOVIE_TITLE = "MOVIE_TITLE";
     private final String MOVIE_REL = "MOVIE_REL";
@@ -26,7 +30,6 @@ public class MovieDetailFragment extends Fragment {
     private final String MOVIE_RATE = "MOVIE_RATE";
     private final String MOVIE_ID = "MOVIE_ID";
     private final String MOVIE_POSTER = "MOVIE_POSTER";
-    String movieID = null;
 
     public MovieDetailFragment() {
     }
@@ -41,6 +44,8 @@ public class MovieDetailFragment extends Fragment {
     TextView rate_text_view;
     @InjectView(R.id.movie_poster)
     ImageView poster_view;
+    @InjectView(R.id.movie_trailer_list_view)
+    ListView movie_trailer_list_view;
 
 
     @Override
@@ -62,9 +67,20 @@ public class MovieDetailFragment extends Fragment {
         summary_text_view.setText(movie_summary);
         release_text_view.setText(movie_release);
         rate_text_view.setText(movie_rate);
-
         Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(poster_view);
+        updateTrailer(movieID);
+        mMovieTrailerAdapter = new MovieTrailerAdapter(getActivity(), new ArrayList<MovieTrailer>());
+        ListView trailerListView = (ListView) view.findViewById(R.id.movie_trailer_view);
+        //trailerListView.setAdapter(mMovieTrailerAdapter);
+
 
         return view;
+    }
+
+
+    private void updateTrailer(String movieID) {
+        MovieTrailerHandler movieTrailerHandler = new MovieTrailerHandler(getActivity(), mMovieTrailerAdapter);
+        Log.i("Tag", " In update Trailer");
+        movieTrailerHandler.execute(movieID);
     }
 }
