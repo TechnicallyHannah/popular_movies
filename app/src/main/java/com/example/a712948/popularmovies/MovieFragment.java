@@ -7,6 +7,10 @@ import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import com.example.a712948.popularmovies.rest.RestClient;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import java.util.ArrayList;
 
@@ -52,7 +56,7 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
+        mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<DiscoverMovieResponse>());
         View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
         gridView.setAdapter(mMovieAdapter);
@@ -61,15 +65,16 @@ public class MovieFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Movie movie = (Movie) adapterView.getItemAtPosition(position);
+                MovieResponse movieResponse = (MovieResponse) adapterView.getItemAtPosition(position);
+
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                Log.i("Tag", movie.title);
-                intent.putExtra("MOVIE_TITLE", movie.title);
-                intent.putExtra("MOVIE_SUM", movie.summary);
-                intent.putExtra("MOVIE_RATE", movie.vote_avg);
-                intent.putExtra("MOVIE_REL", movie.release_date);
-                intent.putExtra("MOVIE_POSTER", movie.poster);
-                startActivity(intent);
+                // Log.i("Tag", discoverMovieResponse.title);
+//                intent.putExtra("MOVIE_TITLE", discoverMovieResponse.title);
+//                intent.putExtra("MOVIE_SUM", discoverMovieResponse.summary);
+//                intent.putExtra("MOVIE_RATE", discoverMovieResponse.vote_avg);
+//                intent.putExtra("MOVIE_REL", discoverMovieResponse.release_date);
+//                intent.putExtra("MOVIE_POSTER", discoverMovieResponse.poster);
+//                startActivity(intent);
             }
 
         });
@@ -78,13 +83,24 @@ public class MovieFragment extends Fragment {
 
 
     private void updateMovies() {
-        ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
-        dataTask.execute("popularity.asc");
+        RestClient.get().getContent(new Callback<DiscoverMovieResponse>() {
+            @Override
+            public void success(DiscoverMovieResponse discoverMovieResponse, Response response) {
+                Log.i("Tag", discoverMovieResponse.results + " Movies Returned");
+                mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<DiscoverMovieResponse>());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
     }
 
     private void updateMoviesHighRate() {
-        ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
-        dataTask.execute("vote_average.asc");
+        //  ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
+        // dataTask.execute("vote_average.asc");
     }
 
     @Override

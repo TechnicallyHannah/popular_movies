@@ -2,6 +2,7 @@ package com.example.a712948.popularmovies;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,24 +17,26 @@ import java.util.List;
  * @author Hannah Paulson
  * @since 8/20/15.
  */
-public class MovieAdapter extends ArrayAdapter<Movie> {
+public class MovieAdapter extends ArrayAdapter<DiscoverMovieResponse> {
 
     @InjectView(R.id.movie_poster)
     ImageView poster_view;
 
 
-    public MovieAdapter(Activity context, List<Movie> movies) {
+    public MovieAdapter(Activity context, List<DiscoverMovieResponse> movies) {
         super(context, 0, movies);
     }
 
     public View getView(int position, View view, ViewGroup parent) {
-        Movie movie = getItem(position);
+        DiscoverMovieResponse discoverMovieResponse =getItem(position);
         String poster = null;
         Context context = getContext();
+        Log.i("Tag",position + "");
+        Log.i("TAG", discoverMovieResponse.results.get(position).poster_path + " ");
 
-        if (movie.poster != null) {
-            poster = movie.poster;
-        }
+        //if (movieResponse.poster_path != null) {
+         //   poster = movieResponse.poster_path;
+       // }
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.fragment_movie_grid, parent, false);
         }
