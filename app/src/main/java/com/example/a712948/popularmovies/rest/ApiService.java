@@ -10,5 +10,5 @@ import retrofit.http.GET;
  */
 public interface ApiService {
     @GET("/movie?sorted_by=vote_average.asc&api_key=fc47e47a86969055486f846572f8bf83")
-    public void getContent(Callback<DiscoverMovieResponse> callback);
+    void getContent(Callback<DiscoverMovieResponse> callback);
 }

@@ -1,6 +1,5 @@
 package com.example.a712948.popularmovies.rest;
 
-import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import retrofit.RestAdapter;
@@ -33,8 +32,6 @@ public class RestClient {
                 .setEndpoint(BASE_URL)
                 .setConverter(new GsonConverter(gson))
                 .build();
-
-        Log.i("LOG", " Inside Rest Client");
         apiService = restAdapter.create(ApiService.class);
 
     }
