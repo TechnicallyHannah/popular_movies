@@ -7,8 +7,12 @@ import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
-import java.util.ArrayList;
+import com.example.a712948.popularmovies.POJO.Movies;
+import com.example.a712948.popularmovies.POJO.Result;
+import com.example.a712948.popularmovies.rest.RestClient;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A fragment representing a list of Items.
@@ -16,7 +20,7 @@ import java.util.ArrayList;
  * with a GridView.
  */
 public class MovieFragment extends Fragment {
-    private MovieAdapter mMovieAdapter;
+    public MovieAdapter mMovieAdapter;
 
     public MovieFragment() {
     }
@@ -49,47 +53,54 @@ public class MovieFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-
-        mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
-        View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
-        GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
-        gridView.setAdapter(mMovieAdapter);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Movie movie = (Movie) adapterView.getItemAtPosition(position);
-                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                Log.i("Tag", movie.title);
-                intent.putExtra("MOVIE_TITLE", movie.title);
-                intent.putExtra("MOVIE_SUM", movie.summary);
-                intent.putExtra("MOVIE_RATE", movie.vote_avg);
-                intent.putExtra("MOVIE_REL", movie.release_date);
-                intent.putExtra("MOVIE_POSTER", movie.poster);
-                startActivity(intent);
-            }
-
-        });
+        final View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
+        updateMovies(view);
         return view;
     }
 
 
-    private void updateMovies() {
-        ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
-        dataTask.execute("popularity.asc");
+    private void updateMovies(final View view) {
+        RestClient.get().getContent(new Callback<Movies>() {
+            @Override
+            public void success(Movies movies, Response response) {
+                Log.i("TAg", movies.results.get(1).getOverview() + "");
+                MovieAdapter mMovieAdapter = new MovieAdapter(getActivity(), movies.results);
+                GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
+                gridView.setAdapter(mMovieAdapter);
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Result movieClicked = (Result) adapterView.getItemAtPosition(i);
+                        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+                        Log.i("TAG", movieClicked.getOriginalTitle() + "");
+                        intent.putExtra("MOVIE_TITLE", movieClicked.getOriginalTitle());
+                        intent.putExtra("MOVIE_SUM", movieClicked.getOverview());
+                        intent.putExtra("MOVIE_RATE", movieClicked.getVoteAverage());
+                        intent.putExtra("MOVIE_REL", movieClicked.getReleaseDate());
+                        intent.putExtra("MOVIE_POSTER", movieClicked.getPosterPath());
+                        startActivity(intent);
+
+                    }
+                });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Tag", " Error : " + error);
+            }
+        });
+
     }
 
     private void updateMoviesHighRate() {
-        ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
-        dataTask.execute("vote_average.asc");
+        //  ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
+        // dataTask.execute("vote_average.asc");
     }
 
     @Override
     public void onStart() {
-        updateMovies();
         super.onStart();
     }
 
