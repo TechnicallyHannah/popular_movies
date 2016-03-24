@@ -39,6 +39,7 @@ public class MovieAdapter extends ArrayAdapter<Result> {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.fragment_movie_grid, parent, false);
         }
+
         ImageView poster_view = (ImageView) view.findViewById(R.id.image_holder);
         Picasso.with(context).load("http://image.tmdb.org/t/p/w342/" + poster).into(poster_view);
         return view;

@@ -14,6 +14,8 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.List;
+
 /**
  * A fragment representing a list of Items.
  * Large screen devices (such as tablets) are supported by replacing the ListView
@@ -21,6 +23,7 @@ import retrofit.client.Response;
  */
 public class MovieFragment extends Fragment {
     public MovieAdapter mMovieAdapter;
+    public List<Result> mMovies;
 
     public MovieFragment() {
     }
@@ -49,6 +52,9 @@ public class MovieFragment extends Fragment {
         if (id == R.id.action_toprate) {
             updateMoviesHighRate();
         }
+        if (id == R.id.action_pop) {
+            updatePopularMovies();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -65,8 +71,8 @@ public class MovieFragment extends Fragment {
         RestClient.get().getContent(new Callback<Movies>() {
             @Override
             public void success(Movies movies, Response response) {
-                Log.i("TAg", movies.results.get(1).getOverview() + "");
-                MovieAdapter mMovieAdapter = new MovieAdapter(getActivity(), movies.results);
+                mMovies = movies.results;
+                mMovieAdapter = new MovieAdapter(getActivity(), mMovies);
                 GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
                 gridView.setAdapter(mMovieAdapter);
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,8 +101,41 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateMoviesHighRate() {
-        //  ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
-        // dataTask.execute("vote_average.asc");
+        RestClient.get().getTopRated(new Callback<Movies>() {
+            @Override
+            public void success(Movies movies, Response response) {
+                if (!mMovies.isEmpty()) {
+                    mMovieAdapter.clear();
+                    mMovieAdapter.addAll(movies.results);
+                    mMovieAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Tag", " Error : " + error);
+            }
+        });
+
+    }
+
+    private void updatePopularMovies() {
+        RestClient.get().getContent(new Callback<Movies>() {
+            @Override
+            public void success(Movies movies, Response response) {
+                if (!mMovies.isEmpty()) {
+                    mMovieAdapter.clear();
+                    mMovieAdapter.addAll(movies.results);
+                    mMovieAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Tag", " Error : " + error);
+            }
+        });
+
     }
 
     @Override

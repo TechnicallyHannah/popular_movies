@@ -9,6 +9,8 @@ import retrofit.http.GET;
  * @since 9/10/15.
  */
 public interface ApiService {
-    @GET("/movie?sorted_by=vote_average.asc&api_key=fc47e47a86969055486f846572f8bf83")
+    @GET("/discover/movie?sorted_by=vote_average.asc&api_key=fc47e47a86969055486f846572f8bf83")
     void getContent(Callback<Movies> callback);
+    @GET("/movie/top_rated?api_key=fc47e47a86969055486f846572f8bf83")
+    void getTopRated(Callback<Movies> callback);
 }
