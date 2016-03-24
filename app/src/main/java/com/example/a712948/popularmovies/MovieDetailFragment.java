@@ -58,7 +58,7 @@ public class MovieDetailFragment extends Fragment {
         release_text_view.setText(movie_release);
         rate_text_view.setText(movie_rate);
 
-        Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(poster_view);
+        Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w185/" + poster).into(poster_view);
 
         return view;
     }
