@@ -55,6 +55,9 @@ public class MovieFragment extends Fragment {
         if (id == R.id.action_pop) {
             updatePopularMovies();
         }
+        if (id == R.id.action_fav) {
+            //TODO: add fav here
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_Pop">Popular Movies</string>
     <string name="action_toprate">Top Rated Movies</string>
+    <string name="action_fav">Favorites</string>
     <string name="title_activity_movie_detail">MovieDetail</string>
 
 <!-- TODO: Remove or change this placeholder text -->
