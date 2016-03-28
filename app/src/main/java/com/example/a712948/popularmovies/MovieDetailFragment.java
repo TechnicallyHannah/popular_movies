@@ -47,6 +47,11 @@ public class MovieDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_detail, null);
         ButterKnife.inject(this, view);
 
+
+
+
+
+
         Intent intent = getActivity().getIntent();
         String poster = intent.getStringExtra(MOVIE_POSTER);
         String movie_title = intent.getStringExtra(MOVIE_TITLE);

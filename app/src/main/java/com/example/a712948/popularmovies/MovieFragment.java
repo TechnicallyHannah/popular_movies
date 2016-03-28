@@ -84,6 +84,7 @@ public class MovieFragment extends Fragment {
                         Result movieClicked = (Result) adapterView.getItemAtPosition(i);
                         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
                         Log.i("TAG", movieClicked.getOriginalTitle() + "");
+                        intent.putExtra("MOVIEID", movieClicked.getId());
                         intent.putExtra("MOVIE_TITLE", movieClicked.getOriginalTitle());
                         intent.putExtra("MOVIE_SUM", movieClicked.getOverview());
                         intent.putExtra("MOVIE_RATE", movieClicked.getVoteAverage());
