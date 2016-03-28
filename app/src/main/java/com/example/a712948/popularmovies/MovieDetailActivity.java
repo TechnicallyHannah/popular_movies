@@ -2,14 +2,9 @@ package com.example.a712948.popularmovies;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.ListView;
 import butterknife.ButterKnife;
 import com.example.a712948.popularmovies.POJO.Trailers;
-import com.example.a712948.popularmovies.rest.RestClient;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 import java.util.List;
 
@@ -31,22 +26,6 @@ public class MovieDetailActivity extends ActionBarActivity {
         }
     }
 
-    private void getTrailers(String mMovieID) {
-        RestClient.get().getTrailers(mMovieID, new Callback<Trailers>() {
-            @Override
-            public void success(Trailers trailers, Response response) {
-                Log.i("Movie Trailer Results", trailers.getYoutube() + "");
-//
-//                trailer_list.setAdapter(adapter);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Tag", " Error : " + error);
-            }
-        });
-
-    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {

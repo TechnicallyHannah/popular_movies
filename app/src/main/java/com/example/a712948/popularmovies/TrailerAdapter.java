@@ -2,9 +2,11 @@ package com.example.a712948.popularmovies;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 import com.example.a712948.popularmovies.POJO.Youtube;
 
 import java.util.List;
@@ -14,41 +16,38 @@ import java.util.List;
  * @since 3/24/16.
  */
 public class TrailerAdapter extends BaseAdapter {
-    private Context mContext;
-    private List<Youtube> trailersList;
+
+    private Context context;
+    private List<Youtube> moviesList;
 
 
-    public TrailerAdapter(Context context,List<Youtube> trailersList) {
-        super();
-        this.trailersList = trailersList;
+    public TrailerAdapter(Context context, List<Youtube> moviesList) {
+        this.context = context;
+        this.moviesList = moviesList;
     }
-
     @Override
     public int getCount() {
-        return trailersList.size();
+        Log.i("Count",moviesList.size()+"");
+        return moviesList.size();
     }
-
     @Override
-    public Object getItem(int position) {
-        return position;
+    public Object getItem(int pos) {
+        return moviesList.get(pos);
     }
-
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        //LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-     //   convertView = inflater.inflate(R.layout.trailers_listview, null);
+    public View getView(int position, View view, ViewGroup parent) {
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.trailers_listview, parent, false);
+        }
+        Log.i("Inside Adapter",moviesList.get(position)+"");
 
-//        Log.i("InsideTrailerAdap", trailersList.get(position).getName() + "");
-//        TextView textView = (TextView) convertView.findViewById(R.id.trailer_title);
-//        textView.setText(trailersList.get(position).getName());
-
-        Log.i("InsideTrailerAdap", trailersList + "");
-        return convertView;
+        TextView tv = (TextView) view.findViewById(R.id.trailer_title);
+        tv.setText(moviesList.get(position).getName());
+        return view;
     }
 
 }
