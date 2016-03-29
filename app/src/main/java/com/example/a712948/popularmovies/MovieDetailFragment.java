@@ -32,6 +32,7 @@ public class MovieDetailFragment extends Fragment {
     Trailers mTrailers;
     Reviews mReviews;
     MovieDetail mMovieDetail;
+    Boolean mfavorite = false;
 
 
     public MovieDetailFragment() {
@@ -49,6 +50,8 @@ public class MovieDetailFragment extends Fragment {
     TextView review_author;
     @InjectView(R.id.review_content)
     TextView review_text;
+    @InjectView(R.id.movie_favorite)
+    TextView fav_text_view;
 
     ViewGroup trailerView;
     ViewGroup reviewView;
@@ -89,6 +92,7 @@ public class MovieDetailFragment extends Fragment {
                 populateTrailers(mTrailers);
                 populateReviews(mReviews);
             }
+
             @Override
             public void failure(RetrofitError error) {
                 Log.i("Tag", " Error : " + error);
@@ -102,6 +106,19 @@ public class MovieDetailFragment extends Fragment {
         release_text_view.setText(details.getReleaseDate());
         rate_text_view.setText(details.getVoteAverage() + "/10");
         Picasso.with(getView().getContext()).load("http://image.tmdb.org/t/p/w342/" + details.getPosterPath()).into(poster_view);
+        fav_text_view.setText("UnFavorite");
+        fav_text_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mfavorite) {
+                    mfavorite = false;
+                    fav_text_view.setText("Favorite");
+                } else {
+                    mfavorite= true;
+                    fav_text_view.setText("UnFavorite");
+                }
+            }
+        });
     }
 
     private void populateTrailers(Trailers trailers) {
