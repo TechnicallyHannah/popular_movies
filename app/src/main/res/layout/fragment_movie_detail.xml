@@ -45,11 +45,40 @@
                     android:layout_height="wrap_content"
                     android:text="summary"
                     android:layout_below="@id/movie_poster"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/trailer_title"
+                      tools:text="Trailers"
+                      android:text="Trailers"
+                      android:layout_below="@id/movie_summary_text"
+                    />
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:id="@+id/trailer_contailer"
+                          android:id="@+id/trailer_container"
                           android:orientation="vertical"
-                          android:layout_below="@id/movie_summary_text"></LinearLayout>
+                          android:layout_below="@id/trailer_title"></LinearLayout>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/review_title"
+                      android:layout_below="@id/trailer_container"
+                      tools:text="Reviews"
+                      android:text="Review"
+                    />
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/review_container"
+                          android:orientation="vertical"
+                          android:layout_below="@id/review_title">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/review_author_text"
+                          tools:text="author"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/review_content"
+                          tools:text="Summary"
+                          android:maxLines="3"/>
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

@@ -29,7 +29,6 @@ public class MovieDetailFragment extends Fragment {
     //Todo make loading screen
     private final String MOVIE_ID = "MOVIEID";
     List<Genre> mGenres;
-    List<Youtube> YTTrailers;
     Trailers mTrailers;
     Reviews mReviews;
     MovieDetail mMovieDetail;
@@ -46,20 +45,26 @@ public class MovieDetailFragment extends Fragment {
     TextView rate_text_view;
     @InjectView(R.id.movie_poster)
     ImageView poster_view;
+    @InjectView(R.id.review_author_text)
+    TextView review_author;
+    @InjectView(R.id.review_content)
+    TextView review_text;
+
     ViewGroup trailerView;
+    ViewGroup reviewView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.setRetainInstance(true);
-
         View view = inflater.inflate(R.layout.fragment_movie_detail, null);
         ButterKnife.inject(this, view);
         Intent intent = getActivity().getIntent();
         String movieID = intent.getStringExtra(MOVIE_ID);
         getDetails(movieID);
-        trailerView = (ViewGroup) view.findViewById(R.id.trailer_contailer);
+        trailerView = (ViewGroup) view.findViewById(R.id.trailer_container);
+        reviewView = (ViewGroup) view.findViewById(R.id.review_container);
 
         //summary_text_view.setText(mMovieDetail.getOverview());
 
@@ -80,13 +85,10 @@ public class MovieDetailFragment extends Fragment {
                 mGenres = detail.getGenres();
                 mTrailers = detail.getTrailers();
                 mReviews = detail.getReviews();
-
                 populateDetails(mMovieDetail);
                 populateTrailers(mTrailers);
-                //populateReviews(mReviews);
-
+                populateReviews(mReviews);
             }
-
             @Override
             public void failure(RetrofitError error) {
                 Log.i("Tag", " Error : " + error);
@@ -105,8 +107,6 @@ public class MovieDetailFragment extends Fragment {
     private void populateTrailers(Trailers trailers) {
         // Didnt include QuickTime because https://www.themoviedb.org/talk/5322d1fcc3a36828ba0035d5
         List<Youtube> youtube = trailers.getYoutube();
-
-
         for (int i = 0; i < youtube.size(); i++) {
             Youtube trailer = youtube.get(i);
             trailerView.addView(createTrailer(trailer));
@@ -124,5 +124,15 @@ public class MovieDetailFragment extends Fragment {
             }
         });
         return trailerView;
+    }
+
+    private void populateReviews(Reviews reviews) {
+        List<ResultPages> firstReview = reviews.getResults();
+        //set up onclick
+        // Only show first review
+        if (reviews.getResults() != null) {
+            review_author.setText(firstReview.get(0).getAuthor());
+            review_text.setText(firstReview.get(0).getContent());
+        }
     }
 }
