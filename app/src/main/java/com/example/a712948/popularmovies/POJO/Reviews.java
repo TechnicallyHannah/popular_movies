@@ -11,59 +11,74 @@ import java.util.List;
  * @since 3/24/16.
  */
 public class Reviews {
-    @SerializedName("id")
-    @Expose
-    public Integer id;
+
     @SerializedName("page")
     @Expose
-    public Integer page;
+    private Integer page;
     @SerializedName("results")
     @Expose
-    public List<ResultPages> results = new ArrayList<ResultPages>();
+    private List<Object> results = new ArrayList<Object>();
     @SerializedName("total_pages")
     @Expose
-    public Integer totalPages;
+    private Integer totalPages;
     @SerializedName("total_results")
     @Expose
-    public Integer totalResults;
+    private Integer totalResults;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    /**
+     * @return The page
+     */
     public Integer getPage() {
         return page;
     }
 
+    /**
+     * @param page The page
+     */
     public void setPage(Integer page) {
         this.page = page;
     }
 
-    public List<ResultPages> getResults() {
+    /**
+     * @return The results
+     */
+    public List<Object> getResults() {
         return results;
     }
 
-    public void setResults(List<ResultPages> results) {
+    /**
+     * @param results The results
+     */
+    public void setResults(List<Object> results) {
         this.results = results;
     }
 
+    /**
+     * @return The totalPages
+     */
     public Integer getTotalPages() {
         return totalPages;
     }
 
+    /**
+     * @param totalPages The total_pages
+     */
     public void setTotalPages(Integer totalPages) {
         this.totalPages = totalPages;
     }
 
+    /**
+     * @return The totalResults
+     */
     public Integer getTotalResults() {
         return totalResults;
     }
 
+    /**
+     * @param totalResults The total_results
+     */
     public void setTotalResults(Integer totalResults) {
         this.totalResults = totalResults;
     }
+
 }

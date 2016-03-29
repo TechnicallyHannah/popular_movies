@@ -5,14 +5,15 @@
                 tools:context="com.example.a712948.popularmovies.MovieDetailFragment">
 
     <ScrollView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:context="com.example.a712948.popularmovies.MovieDetailFragment"
             android:id="@+id/scrollView"
             >
 
         <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:id="@+id/details">
 
             <ImageView
                     android:id="@+id/movie_poster"
@@ -27,7 +28,8 @@
                           android:paddingTop="25dp"
                           android:gravity="right"
                           android:orientation="vertical"
-                          android:paddingRight="16dp">
+                          android:paddingRight="16dp"
+                          android:id="@+id/text_details">
                 <TextView
                         android:id="@+id/movie_release_date"
                         android:layout_width="wrap_content"
@@ -42,12 +44,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="summary"
-                    android:paddingTop="250dp"
-                    android:paddingLeft="16dp"/>
+                    android:layout_below="@id/movie_poster"/>
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/trailer_contailer"
+                          android:orientation="vertical"
+                          android:layout_below="@id/movie_summary_text"></LinearLayout>
         </RelativeLayout>
     </ScrollView>
-    <ListView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/listview"
-              android:layout_below="@id/scrollView"/>
 </RelativeLayout>

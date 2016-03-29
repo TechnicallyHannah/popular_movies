@@ -1,6 +1,7 @@
 package com.example.a712948.popularmovies;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,29 +9,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.example.a712948.popularmovies.POJO.Trailers;
+import com.example.a712948.popularmovies.POJO.*;
 import com.example.a712948.popularmovies.rest.RestClient;
-import com.squareup.picasso.Picasso;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.util.List;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailFragment extends Fragment {
-
-    private final String MOVIE_TITLE = "MOVIE_TITLE";
-    private final String MOVIE_REL = "MOVIE_REL";
-    private final String MOVIE_SUM = "MOVIE_SUM";
-    private final String MOVIE_RATE = "MOVIE_RATE";
-    private final String MOVIE_POSTER = "MOVIE_POSTER";
     private final String MOVIE_ID = "MOVIEID";
+    List<Genre> mGenres;
+    List<Youtube> YTTrailers;
+    Trailers mTrailers;
+    Reviews mReviews;
+    MovieDetail mMovieDetail;
 
 
     public MovieDetailFragment() {
@@ -44,8 +44,7 @@ public class MovieDetailFragment extends Fragment {
     TextView rate_text_view;
     @InjectView(R.id.movie_poster)
     ImageView poster_view;
-    @InjectView(R.id.listview)
-    ListView mListView;
+    ViewGroup trailerView;
 
 
     @Override
@@ -55,31 +54,34 @@ public class MovieDetailFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_movie_detail, null);
         ButterKnife.inject(this, view);
-
-
         Intent intent = getActivity().getIntent();
-        String poster = intent.getStringExtra(MOVIE_POSTER);
-        String movie_title = intent.getStringExtra(MOVIE_TITLE);
-        String movie_summary = intent.getStringExtra(MOVIE_SUM);
-        String movie_release = intent.getStringExtra(MOVIE_REL);
-        String movie_rate = intent.getStringExtra(MOVIE_RATE);
         String movieID = intent.getStringExtra(MOVIE_ID);
+        getDetails(movieID);
+        trailerView = (ViewGroup) view.findViewById(R.id.trailer_contailer);
 
-        getActivity().setTitle(movie_title);
-        summary_text_view.setText(movie_summary);
-        release_text_view.setText(movie_release);
-        rate_text_view.setText(movie_rate);
-        getTrailers(movieID);
-        Picasso.with(view.getContext()).load("http://image.tmdb.org/t/p/w185/" + poster).into(poster_view);
+        //summary_text_view.setText(mMovieDetail.getOverview());
+
+        if (mMovieDetail != null) {
+            Log.i("MovieDetailOnePojo", "" + mMovieDetail);
+        }
         return view;
     }
 
 
-    private void getTrailers(String mMovieID) {
-        RestClient.get().getTrailers(mMovieID, new Callback<Trailers>() {
+    private void getDetails(String mMovieID) {
+        RestClient.get().getDetails(mMovieID, new Callback<MovieDetail>() {
             @Override
-            public void success(Trailers trailers, Response response) {
-                mListView.setAdapter(new TrailerAdapter(getActivity(), trailers.getYoutube()));
+            public void success(MovieDetail detail, Response response) {
+                Log.i("InsideCallBack", "" + detail);
+                getActivity().setTitle(detail.getTitle());
+                mMovieDetail = detail;
+                mGenres = detail.getGenres();
+                mTrailers = detail.getTrailers();
+                mReviews = detail.getReviews();
+
+                populateDetails(mMovieDetail);
+                populateTrailers(mTrailers);
+
             }
 
             @Override
@@ -87,5 +89,34 @@ public class MovieDetailFragment extends Fragment {
                 Log.i("Tag", " Error : " + error);
             }
         });
+    }
+
+
+    private void populateDetails(MovieDetail details) {
+        summary_text_view.setText(details.getOverview());
+    }
+
+    private void populateTrailers(Trailers trailers) {
+        // Didnt include QuickTime because https://www.themoviedb.org/talk/5322d1fcc3a36828ba0035d5
+        List<Youtube> youtube = trailers.getYoutube();
+
+
+        for (int i = 0; i < youtube.size(); i++) {
+            Youtube trailer = youtube.get(i);
+            trailerView.addView(createTrailer(trailer));
+        }
+    }
+
+    public View createTrailer(final Youtube youtube) {
+        View trailerView = getActivity().getLayoutInflater().inflate(R.layout.trailers_listview, null);
+        TextView title = (TextView) trailerView.findViewById(R.id.trailer_title);
+        title.setText(youtube.getName());
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v="+youtube.getSource())));
+            }
+        });
+        return trailerView;
     }
 }
