@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.example.a712948.popularmovies.POJO.*;
 import com.example.a712948.popularmovies.rest.RestClient;
+import com.squareup.picasso.Picasso;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -25,6 +26,7 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailFragment extends Fragment {
+    //Todo make loading screen
     private final String MOVIE_ID = "MOVIEID";
     List<Genre> mGenres;
     List<Youtube> YTTrailers;
@@ -81,6 +83,7 @@ public class MovieDetailFragment extends Fragment {
 
                 populateDetails(mMovieDetail);
                 populateTrailers(mTrailers);
+                //populateReviews(mReviews);
 
             }
 
@@ -94,6 +97,9 @@ public class MovieDetailFragment extends Fragment {
 
     private void populateDetails(MovieDetail details) {
         summary_text_view.setText(details.getOverview());
+        release_text_view.setText(details.getReleaseDate());
+        rate_text_view.setText(details.getVoteAverage() + "/10");
+        Picasso.with(getView().getContext()).load("http://image.tmdb.org/t/p/w342/" + details.getPosterPath()).into(poster_view);
     }
 
     private void populateTrailers(Trailers trailers) {
@@ -114,7 +120,7 @@ public class MovieDetailFragment extends Fragment {
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v="+youtube.getSource())));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + youtube.getSource())));
             }
         });
         return trailerView;
