@@ -28,14 +28,18 @@ import java.util.List;
 public class MovieDetailFragment extends Fragment {
     //Todo make loading screen
     private final String MOVIE_ID = "MOVIEID";
+    public static final String PREFS_NAME = "FAV_PREFS";
+    public static final String FAVORITES = "Movie_Favorite";
+
+
     List<Genre> mGenres;
     Trailers mTrailers;
+    String mMovieID;
     Reviews mReviews;
     MovieDetail mMovieDetail;
-    Boolean mfavorite = false;
-
 
     public MovieDetailFragment() {
+        super();
     }
 
     @InjectView(R.id.movie_summary_text)
@@ -64,16 +68,13 @@ public class MovieDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_detail, null);
         ButterKnife.inject(this, view);
         Intent intent = getActivity().getIntent();
-        String movieID = intent.getStringExtra(MOVIE_ID);
-        getDetails(movieID);
+
+        mMovieID = intent.getStringExtra(MOVIE_ID);
+        getDetails(mMovieID);
         trailerView = (ViewGroup) view.findViewById(R.id.trailer_container);
         reviewView = (ViewGroup) view.findViewById(R.id.review_container);
 
-        //summary_text_view.setText(mMovieDetail.getOverview());
 
-        if (mMovieDetail != null) {
-            Log.i("MovieDetailOnePojo", "" + mMovieDetail);
-        }
         return view;
     }
 
@@ -101,24 +102,19 @@ public class MovieDetailFragment extends Fragment {
     }
 
 
-    private void populateDetails(MovieDetail details) {
+    private void populateDetails(final MovieDetail details) {
         summary_text_view.setText(details.getOverview());
         release_text_view.setText(details.getReleaseDate());
         rate_text_view.setText(details.getVoteAverage() + "/10");
         Picasso.with(getView().getContext()).load("http://image.tmdb.org/t/p/w342/" + details.getPosterPath()).into(poster_view);
-        fav_text_view.setText("UnFavorite");
+        fav_text_view.setText("Not Fav");
         fav_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mfavorite) {
-                    mfavorite = false;
-                    fav_text_view.setText("Favorite");
-                } else {
-                    mfavorite= true;
-                    fav_text_view.setText("UnFavorite");
-                }
+                fav_text_view.setText("Fav");
             }
         });
+
     }
 
     private void populateTrailers(Trailers trailers) {
@@ -132,7 +128,7 @@ public class MovieDetailFragment extends Fragment {
 
     public View createTrailer(final Youtube youtube) {
         View trailerView = getActivity().getLayoutInflater().inflate(R.layout.trailers_listview, null);
-        TextView title = (TextView) trailerView.findViewById(R.id.trailer_title);
+        final TextView title = (TextView) trailerView.findViewById(R.id.trailer_title);
         title.setText(youtube.getName());
         title.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +143,7 @@ public class MovieDetailFragment extends Fragment {
         List<ResultPages> firstReview = reviews.getResults();
         //set up onclick
         // Only show first review
-        if (reviews.getResults() != null) {
+        if (!reviews.getResults().isEmpty()) {
             review_author.setText(firstReview.get(0).getAuthor());
             review_text.setText(firstReview.get(0).getContent());
         }

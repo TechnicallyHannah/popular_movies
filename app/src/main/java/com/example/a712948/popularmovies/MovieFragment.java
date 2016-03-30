@@ -1,6 +1,8 @@
 package com.example.a712948.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,6 +24,7 @@ import java.util.List;
  * with a GridView.
  */
 public class MovieFragment extends Fragment {
+    public static final String PREFS_NAME = "FAV_PREFS";
     public MovieAdapter mMovieAdapter;
     public List<Result> mMovies;
 
@@ -57,6 +60,7 @@ public class MovieFragment extends Fragment {
         }
         if (id == R.id.action_fav) {
             //TODO: add fav here
+            updateFav();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -133,6 +137,19 @@ public class MovieFragment extends Fragment {
                 Log.i("Tag", " Error : " + error);
             }
         });
+
+    }
+
+    private void updateFav() {
+        SharedPreferences settings = this.getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Log.i("SavedPref", "" + settings.getAll());
+        Log.i("Number of Favs", settings.getAll().size() + "");
+
+
+        Intent intent = new Intent(getActivity(), FavoriteActivity.class);
+        startActivity(intent);
+
+
 
     }
 
