@@ -116,14 +116,12 @@ public class MovieDetailFragment extends Fragment {
         fav_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 fav_text_view.setText("Fav");
                 if (mydb.insertFavorites(mMovieDetail.getId().toString(), mMovieDetail.getPosterPath())) {
                     Toast.makeText(getActivity().getApplicationContext(), "Favorited", Toast.LENGTH_SHORT).show();
                 }
-
-                Log.i("Rows in DB", mydb.numberOfRows()+"");
-                Log.i("DETAILS in DB", mydb.getAllFavorites()+"");
+                Log.i("Rows in DB", mydb.numberOfRows() + "");
+                Log.i("DETAILS in DB", mydb.getAllFavorites() + "");
 
             }
         });
