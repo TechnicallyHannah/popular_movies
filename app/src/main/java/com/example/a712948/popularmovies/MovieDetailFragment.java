@@ -1,6 +1,7 @@
 package com.example.a712948.popularmovies;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.example.a712948.popularmovies.POJO.*;
@@ -30,13 +32,15 @@ public class MovieDetailFragment extends Fragment {
     private final String MOVIE_ID = "MOVIEID";
     public static final String PREFS_NAME = "FAV_PREFS";
     public static final String FAVORITES = "Movie_Favorite";
-
+    int id_to_ = 0;
 
     List<Genre> mGenres;
     Trailers mTrailers;
     String mMovieID;
     Reviews mReviews;
     MovieDetail mMovieDetail;
+    private DBHelper mydb;
+    Cursor mCursor;
 
     public MovieDetailFragment() {
         super();
@@ -68,13 +72,15 @@ public class MovieDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_detail, null);
         ButterKnife.inject(this, view);
         Intent intent = getActivity().getIntent();
-
+        mydb = new DBHelper(getActivity());
         mMovieID = intent.getStringExtra(MOVIE_ID);
+        if (mydb.numberOfRows() != 0) {
+            mCursor = mydb.getData(Integer.parseInt(mMovieID));
+        }
+        Log.i("DB", mydb.getDatabaseName());
         getDetails(mMovieID);
         trailerView = (ViewGroup) view.findViewById(R.id.trailer_container);
         reviewView = (ViewGroup) view.findViewById(R.id.review_container);
-
-
         return view;
     }
 
@@ -83,7 +89,6 @@ public class MovieDetailFragment extends Fragment {
         RestClient.get().getDetails(mMovieID, new Callback<MovieDetail>() {
             @Override
             public void success(MovieDetail detail, Response response) {
-                Log.i("InsideCallBack", "" + detail);
                 getActivity().setTitle(detail.getTitle());
                 mMovieDetail = detail;
                 mGenres = detail.getGenres();
@@ -111,7 +116,15 @@ public class MovieDetailFragment extends Fragment {
         fav_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 fav_text_view.setText("Fav");
+                if (mydb.insertFavorites(mMovieDetail.getId().toString(), mMovieDetail.getPosterPath())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Favorited", Toast.LENGTH_SHORT).show();
+                }
+
+                Log.i("Rows in DB", mydb.numberOfRows()+"");
+                Log.i("DETAILS in DB", mydb.getAllFavorites()+"");
+
             }
         });
 

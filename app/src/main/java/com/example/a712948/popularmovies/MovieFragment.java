@@ -16,6 +16,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class MovieFragment extends Fragment {
     public static final String PREFS_NAME = "FAV_PREFS";
     public MovieAdapter mMovieAdapter;
     public List<Result> mMovies;
+    DBHelper mDBHelper;
 
     public MovieFragment() {
     }
@@ -39,6 +41,13 @@ public class MovieFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         this.setRetainInstance(true);
         setHasOptionsMenu(true);
+
+        mDBHelper = new DBHelper(getActivity());
+        Log.i("MovieFrag",mDBHelper.getDatabaseName());
+        Log.i("MovieFrag",mDBHelper.getAllFavorites()+"");
+
+        ArrayList favorites = mDBHelper.getAllFavorites();
+
     }
 
     @Override
