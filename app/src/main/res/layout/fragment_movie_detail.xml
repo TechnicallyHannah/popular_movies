@@ -5,23 +5,15 @@
                 tools:context="com.example.a712948.popularmovies.MovieDetailFragment">
 
     <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             tools:context="com.example.a712948.popularmovies.MovieDetailFragment"
+            android:id="@+id/scrollView"
             >
 
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                >
-            <TextView
-                    android:id="@+id/movie_title_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/abc_text_size_headline_material"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="16dp"/>
+                        android:id="@+id/details">
 
             <ImageView
                     android:id="@+id/movie_poster"
@@ -29,8 +21,7 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:layout_below="@+id/movie_title_text"/>
+                    android:paddingTop="16dp"/>
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="match_parent"
@@ -38,7 +29,7 @@
                           android:gravity="right"
                           android:orientation="vertical"
                           android:paddingRight="16dp"
-                          android:layout_below="@+id/movie_title_text">
+                          android:id="@+id/text_details">
                 <TextView
                         android:id="@+id/movie_release_date"
                         android:layout_width="wrap_content"
@@ -47,14 +38,51 @@
                         android:id="@+id/movie_rate_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
+                <TextView
+                        android:id="@+id/movie_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
             </LinearLayout>
             <TextView
                     android:id="@+id/movie_summary_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="summary"
-                    android:paddingTop="250dp"
-                    android:paddingLeft="16dp"/>
+                    android:layout_below="@id/movie_poster"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/trailer_title"
+                      tools:text="Trailers"
+                      android:text="Trailers"
+                      android:layout_below="@id/movie_summary_text"
+                    />
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/trailer_container"
+                          android:orientation="vertical"
+                          android:layout_below="@id/trailer_title"></LinearLayout>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/review_title"
+                      android:layout_below="@id/trailer_container"
+                      tools:text="Reviews"
+                      android:text="Review"
+                    />
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/review_container"
+                          android:orientation="vertical"
+                          android:layout_below="@id/review_title">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/review_author_text"
+                          tools:text="author"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/review_content"
+                          tools:text="Summary"
+                          android:maxLines="3"/>
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

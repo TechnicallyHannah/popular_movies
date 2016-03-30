@@ -1,6 +1,8 @@
 package com.example.a712948.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,13 +16,17 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.List;
+
 /**
  * A fragment representing a list of Items.
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  */
 public class MovieFragment extends Fragment {
+    public static final String PREFS_NAME = "FAV_PREFS";
     public MovieAdapter mMovieAdapter;
+    public List<Result> mMovies;
 
     public MovieFragment() {
     }
@@ -49,6 +55,13 @@ public class MovieFragment extends Fragment {
         if (id == R.id.action_toprate) {
             updateMoviesHighRate();
         }
+        if (id == R.id.action_pop) {
+            updatePopularMovies();
+        }
+        if (id == R.id.action_fav) {
+            //TODO: add fav here
+            updateFav();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -65,8 +78,8 @@ public class MovieFragment extends Fragment {
         RestClient.get().getContent(new Callback<Movies>() {
             @Override
             public void success(Movies movies, Response response) {
-                Log.i("TAg", movies.results.get(1).getOverview() + "");
-                MovieAdapter mMovieAdapter = new MovieAdapter(getActivity(), movies.results);
+                mMovies = movies.results;
+                mMovieAdapter = new MovieAdapter(getActivity(), mMovies);
                 GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
                 gridView.setAdapter(mMovieAdapter);
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,12 +87,7 @@ public class MovieFragment extends Fragment {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Result movieClicked = (Result) adapterView.getItemAtPosition(i);
                         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                        Log.i("TAG", movieClicked.getOriginalTitle() + "");
-                        intent.putExtra("MOVIE_TITLE", movieClicked.getOriginalTitle());
-                        intent.putExtra("MOVIE_SUM", movieClicked.getOverview());
-                        intent.putExtra("MOVIE_RATE", movieClicked.getVoteAverage());
-                        intent.putExtra("MOVIE_REL", movieClicked.getReleaseDate());
-                        intent.putExtra("MOVIE_POSTER", movieClicked.getPosterPath());
+                        intent.putExtra("MOVIEID", movieClicked.getId());
                         startActivity(intent);
 
                     }
@@ -95,8 +103,54 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateMoviesHighRate() {
-        //  ServiceHandler dataTask = new ServiceHandler(getActivity(), mMovieAdapter);
-        // dataTask.execute("vote_average.asc");
+        RestClient.get().getTopRated(new Callback<Movies>() {
+            @Override
+            public void success(Movies movies, Response response) {
+                if (!mMovies.isEmpty()) {
+                    mMovieAdapter.clear();
+                    mMovieAdapter.addAll(movies.results);
+                    mMovieAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Tag", " Error : " + error);
+            }
+        });
+
+    }
+
+    private void updatePopularMovies() {
+        RestClient.get().getContent(new Callback<Movies>() {
+            @Override
+            public void success(Movies movies, Response response) {
+                if (!mMovies.isEmpty()) {
+                    mMovieAdapter.clear();
+                    mMovieAdapter.addAll(movies.results);
+                    mMovieAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Tag", " Error : " + error);
+            }
+        });
+
+    }
+
+    private void updateFav() {
+        SharedPreferences settings = this.getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Log.i("SavedPref", "" + settings.getAll());
+        Log.i("Number of Favs", settings.getAll().size() + "");
+
+
+        Intent intent = new Intent(getActivity(), FavoriteActivity.class);
+        startActivity(intent);
+
+
+
     }
 
     @Override

@@ -1,14 +1,21 @@
 package com.example.a712948.popularmovies.rest;
 
+import com.example.a712948.popularmovies.POJO.MovieDetail;
 import com.example.a712948.popularmovies.POJO.Movies;
 import retrofit.Callback;
 import retrofit.http.GET;
+import retrofit.http.Path;
 
 /**
  * @author Hannah Paulson
  * @since 9/10/15.
  */
 public interface ApiService {
-    @GET("/movie?sorted_by=vote_average.asc&api_key=fc47e47a86969055486f846572f8bf83")
+    @GET("/discover/movie?sorted_by=vote_average.asc&api_key=fc47e47a86969055486f846572f8bf83")
     void getContent(Callback<Movies> callback);
+    @GET("/movie/top_rated?api_key=fc47e47a86969055486f846572f8bf83")
+    void getTopRated(Callback<Movies> callback);
+    @GET("/movie/{id}?api_key=fc47e47a86969055486f846572f8bf83&append_to_response=trailers,reviews")
+    void getDetails(@Path("id") String id, Callback<MovieDetail> callback);
+
 }

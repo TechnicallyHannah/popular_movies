@@ -7,6 +7,7 @@ import butterknife.ButterKnife;
 
 public class MovieDetailActivity extends ActionBarActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +17,7 @@ public class MovieDetailActivity extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_fragment, new MovieDetailFragment()).commit();
         }
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
