@@ -1,6 +1,7 @@
 package com.example.a712948.popularmovies;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.example.a712948.popularmovies.POJO.*;
@@ -19,6 +21,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,13 +33,15 @@ public class MovieDetailFragment extends Fragment {
     private final String MOVIE_ID = "MOVIEID";
     public static final String PREFS_NAME = "FAV_PREFS";
     public static final String FAVORITES = "Movie_Favorite";
-
+    int id_to_ = 0;
 
     List<Genre> mGenres;
     Trailers mTrailers;
     String mMovieID;
     Reviews mReviews;
     MovieDetail mMovieDetail;
+    private DBHelper mydb;
+    Cursor mCursor;
 
     public MovieDetailFragment() {
         super();
@@ -68,13 +73,12 @@ public class MovieDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_detail, null);
         ButterKnife.inject(this, view);
         Intent intent = getActivity().getIntent();
-
+        mydb = new DBHelper(getActivity());
         mMovieID = intent.getStringExtra(MOVIE_ID);
+        Log.i("DB", mydb.getDatabaseName());
         getDetails(mMovieID);
         trailerView = (ViewGroup) view.findViewById(R.id.trailer_container);
         reviewView = (ViewGroup) view.findViewById(R.id.review_container);
-
-
         return view;
     }
 
@@ -83,7 +87,6 @@ public class MovieDetailFragment extends Fragment {
         RestClient.get().getDetails(mMovieID, new Callback<MovieDetail>() {
             @Override
             public void success(MovieDetail detail, Response response) {
-                Log.i("InsideCallBack", "" + detail);
                 getActivity().setTitle(detail.getTitle());
                 mMovieDetail = detail;
                 mGenres = detail.getGenres();
@@ -108,10 +111,23 @@ public class MovieDetailFragment extends Fragment {
         rate_text_view.setText(details.getVoteAverage() + "/10");
         Picasso.with(getView().getContext()).load("http://image.tmdb.org/t/p/w342/" + details.getPosterPath()).into(poster_view);
         fav_text_view.setText("Not Fav");
+
         fav_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fav_text_view.setText("Fav");
+                ArrayList array_list = mydb.getAllFavorites();
+                Log.i("arrayList", ""+array_list);
+                if (!array_list.contains(mMovieID)) {
+                    fav_text_view.setText("Fav");
+                    if (mydb.insertFavorite(mMovieDetail.getId().toString(), mMovieDetail.getPosterPath(), mMovieDetail.getOverview(), mMovieDetail.getReleaseDate(), mMovieDetail.getVoteAverage())) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Favorited", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    fav_text_view.setText("unFav");
+                    mydb.removeFavorite(mMovieID);
+                    Log.i("REmove Fav", mydb.getAllFavorites() + "");
+                    Toast.makeText(getActivity().getApplicationContext(), "Removed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
