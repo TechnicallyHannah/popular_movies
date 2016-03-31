@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 import com.example.a712948.popularmovies.POJO.Movies;
 import com.example.a712948.popularmovies.POJO.Result;
 import com.example.a712948.popularmovies.rest.RestClient;
@@ -62,9 +63,15 @@ public class MovieFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_toprate) {
+            if(!mNetwork){
+                Toast.makeText(getActivity().getApplicationContext(), "You are offline", Toast.LENGTH_SHORT).show();
+            }
             updateMoviesHighRate();
         }
         if (id == R.id.action_pop) {
+            if(!mNetwork){
+                Toast.makeText(getActivity().getApplicationContext(), "You are offline", Toast.LENGTH_SHORT).show();
+            }
             updatePopularMovies();
         }
         if (id == R.id.action_fav) {
@@ -79,7 +86,8 @@ public class MovieFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
         mGridView = (GridView) view.findViewById(R.id.gridview_movies);
-        if (!isNetworkAvailable()) {
+        mNetwork = isNetworkAvailable();
+        if (!mNetwork) {
             updateFav();
         } else {
             updatePopularMovies();
