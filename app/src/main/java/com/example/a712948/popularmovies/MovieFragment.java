@@ -145,18 +145,20 @@ public class MovieFragment extends Fragment {
         ArrayList array_list = mDBHelper.getAllFavorites();
         ArrayList<String> moviePaths = new ArrayList();
         final ArrayList<String> movieIDs = new ArrayList();
+        final ArrayList<String> movieTitles = new ArrayList();
         for (int i = 0; i < array_list.size(); i++) {
             final String movieID = array_list.get(i).toString();
             mCursor = mDBHelper.getFavorite(movieID);
             if (mCursor != null && mCursor.moveToFirst()) {
                 moviePaths.add(mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_POSTER_PATH)));
                 movieIDs.add(mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_MOVIEID)));
+                movieTitles.add(mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_MOVIE_TITLE)));
 
             }
             if (mMovieAdapter != null) {
                 mMovieAdapter.clear();
             }
-            mFavoriteAdapter = new FavoriteAdapter(getActivity(), moviePaths);
+            mFavoriteAdapter = new FavoriteAdapter(getActivity(), moviePaths, movieTitles);
             mGridView.setAdapter(mFavoriteAdapter);
             mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

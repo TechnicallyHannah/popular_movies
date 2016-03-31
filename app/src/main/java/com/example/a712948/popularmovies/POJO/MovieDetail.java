@@ -1,7 +1,5 @@
 package com.example.a712948.popularmovies.POJO;
 
-import com.example.a712948.popularmovies.ProductionCompany;
-import com.example.a712948.popularmovies.ProductionCountry;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -16,5 +16,10 @@
     <ImageView android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:id="@+id/image_holder"
-            android:adjustViewBounds="true"/>
+               android:adjustViewBounds="true"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"
+              android:id="@+id/offlineText"
+              android:layout_below="@+id/image_holder"/>
 </RelativeLayout>

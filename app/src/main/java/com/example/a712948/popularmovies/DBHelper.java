@@ -25,6 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String FAVORITES_COLUMN_SUMMARY = "summary";
     public static final String FAVORITES_COLUMN_POSTER_RELEASE = "release";
     public static final String FAVORITES_COLUMN_RATE = "rate";
+    public static final String FAVORITES_COLUMN_MOVIE_TITLE = "movie_title";
     private HashMap hp;
 
     public DBHelper(Context context) {
@@ -36,7 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table favorites " +
-                        "(id integer primary key, movie_id text,poster_path text, summary text ,release text , rate text)"
+                        "(id integer primary key, movie_id text,movie_title text,poster_path text, summary text ,release text , rate text)"
         );
     }
 
@@ -52,10 +53,11 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertFavorite(String movieID, String posterPath, String summary, String release, Double rate) {
+    public boolean insertFavorite(String movieID, String movieTitle, String posterPath, String summary, String release, Double rate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("movie_id", movieID);
+        contentValues.put("movie_title", movieTitle);
         contentValues.put("poster_path", posterPath);
         contentValues.put("summary", summary);
         contentValues.put("release", release);
@@ -83,10 +85,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateFavorites(Integer id, String movieID, String posterPath, String summary, String release, Double rate) {
+    public boolean updateFavorites(Integer id, String movieID, String movieTitle, String posterPath, String summary, String release, Double rate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("movie_id", movieID);
+        contentValues.put("movie_title", movieTitle);
         contentValues.put("poster_path", posterPath);
         contentValues.put("summary", summary);
         contentValues.put("release", release);
