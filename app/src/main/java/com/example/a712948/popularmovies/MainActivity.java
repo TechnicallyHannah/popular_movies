@@ -16,3 +16,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
 }
+
+
+//
+//mCursor = mydb.getFavorite(mMovieID);
+//        if (mCursor != null && mCursor.moveToFirst()) {
+//        Log.i("Coloumn Count", "" + mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_SUMMARY)));
+//        mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_SUMMARY));
+//        }

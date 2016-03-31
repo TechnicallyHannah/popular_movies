@@ -1,8 +1,7 @@
 package com.example.a712948.popularmovies;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,7 +15,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +27,7 @@ public class MovieFragment extends Fragment {
     public MovieAdapter mMovieAdapter;
     public List<Result> mMovies;
     DBHelper mDBHelper;
+    Cursor mCursor;
 
     public MovieFragment() {
     }
@@ -41,12 +40,8 @@ public class MovieFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         this.setRetainInstance(true);
         setHasOptionsMenu(true);
-
         mDBHelper = new DBHelper(getActivity());
-        Log.i("MovieFrag",mDBHelper.getDatabaseName());
-        Log.i("MovieFrag",mDBHelper.getAllFavorites()+"");
-
-        ArrayList favorites = mDBHelper.getAllFavorites();
+        Log.i("Fav", mDBHelper.getAllFavorites() + "");
 
     }
 
@@ -150,15 +145,9 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateFav() {
-        SharedPreferences settings = this.getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        Log.i("SavedPref", "" + settings.getAll());
-        Log.i("Number of Favs", settings.getAll().size() + "");
-
-
-        Intent intent = new Intent(getActivity(), FavoriteActivity.class);
-        startActivity(intent);
-
-
+//
+//        Intent intent = new Intent(getActivity(), FavoriteActivity.class);
+//        startActivity(intent);
 
     }
 
