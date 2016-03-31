@@ -118,18 +118,23 @@ public class MovieDetailFragment extends Fragment {
 
 
     private void populateDetails(final MovieDetail details) {
+        final ArrayList mFavList = mydb.getAllFavorites();
+
         summary_text_view.setText(details.getOverview());
         release_text_view.setText(details.getReleaseDate());
         rate_text_view.setText(details.getVoteAverage() + "/10");
         Picasso.with(getView().getContext()).load("http://image.tmdb.org/t/p/w342/" + details.getPosterPath()).into(poster_view);
-        fav_text_view.setText("Not Fav");
+        if (mFavList.contains(mMovieID)) {
+            fav_text_view.setText("Fav");
+        } else {
+            fav_text_view.setText("Not fav");
+        }
 
         fav_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList array_list = mydb.getAllFavorites();
-                Log.i("arrayList", "" + array_list);
-                if (!array_list.contains(mMovieID)) {
+                Log.i("arrayList", "" + mFavList);
+                if (!mFavList.contains(mMovieID)) {
                     fav_text_view.setText("Fav");
                     if (mydb.insertFavorite(mMovieDetail.getId().toString(), mMovieDetail.getTitle(), mMovieDetail.getPosterPath(), mMovieDetail.getOverview(), mMovieDetail.getReleaseDate(), mMovieDetail.getVoteAverage())) {
                         Toast.makeText(getActivity().getApplicationContext(), "Favorited", Toast.LENGTH_SHORT).show();

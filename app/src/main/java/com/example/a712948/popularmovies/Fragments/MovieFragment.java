@@ -70,14 +70,17 @@ public class MovieFragment extends Fragment {
         if (id == R.id.action_toprate) {
             if (!mNetwork) {
                 Toast.makeText(getActivity().getApplicationContext(), "You are offline", Toast.LENGTH_SHORT).show();
+            } else {
+                updateMoviesHighRate();
             }
-            updateMoviesHighRate();
         }
         if (id == R.id.action_pop) {
             if (!mNetwork) {
                 Toast.makeText(getActivity().getApplicationContext(), "You are offline", Toast.LENGTH_SHORT).show();
+            } else {
+                updatePopularMovies();
+
             }
-            updatePopularMovies();
         }
         if (id == R.id.action_fav) {
             //TODO: add fav here
