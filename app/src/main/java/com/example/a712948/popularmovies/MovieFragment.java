@@ -1,7 +1,10 @@
 package com.example.a712948.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -24,15 +27,16 @@ import java.util.List;
  * with a GridView.
  */
 public class MovieFragment extends Fragment {
-    public static final String PREFS_NAME = "FAV_PREFS";
     public MovieAdapter mMovieAdapter;
     public FavoriteAdapter mFavoriteAdapter;
     public List<Result> mMovies;
+    public Boolean mNetwork;
     GridView mGridView;
     DBHelper mDBHelper;
     Cursor mCursor;
 
     public MovieFragment() {
+
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,6 @@ public class MovieFragment extends Fragment {
         this.setRetainInstance(true);
         setHasOptionsMenu(true);
         mDBHelper = new DBHelper(getActivity());
-        Log.i("Fav", mDBHelper.getAllFavorites() + "");
-
     }
 
     @Override
@@ -76,16 +78,19 @@ public class MovieFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
-        updatePopularMovies();
-        ArrayList array_list = mDBHelper.getAllFavorites();
         mGridView = (GridView) view.findViewById(R.id.gridview_movies);
-        Log.i("tag", array_list + "");
+        if (!isNetworkAvailable()) {
+            updateFav();
+        } else {
+            updatePopularMovies();
+        }
         return view;
     }
 
 
-    private void updateMovies(final View view, List<Result> movies) {
-        if(mFavoriteAdapter !=null){
+    private void updateMovies(final View view, List<Result> movies, String title) {
+        getActivity().setTitle(title);
+        if (mFavoriteAdapter != null) {
             mFavoriteAdapter.clear();
         }
         mMovies = movies;
@@ -109,8 +114,9 @@ public class MovieFragment extends Fragment {
         RestClient.get().getTopRated(new Callback<Movies>() {
             @Override
             public void success(Movies movies, Response response) {
-                updateMovies(getView(), movies.results);
+                updateMovies(getView(), movies.results, "Highest Rated");
             }
+
             @Override
             public void failure(RetrofitError error) {
                 Log.i("Tag", " Error : " + error);
@@ -123,7 +129,7 @@ public class MovieFragment extends Fragment {
         RestClient.get().getContent(new Callback<Movies>() {
             @Override
             public void success(Movies movies, Response response) {
-                updateMovies(getView(), movies.results);
+                updateMovies(getView(), movies.results, "Popular Movies");
             }
 
             @Override
@@ -135,29 +141,30 @@ public class MovieFragment extends Fragment {
     }
 
     private void updateFav() {
-//
-//        Intent intent = new Intent(getActivity(), FavoriteActivity.class);
-//        startActivity(intent);
+        getActivity().setTitle("Favorites");
         ArrayList array_list = mDBHelper.getAllFavorites();
         ArrayList<String> moviePaths = new ArrayList();
+        final ArrayList<String> movieIDs = new ArrayList();
         for (int i = 0; i < array_list.size(); i++) {
             final String movieID = array_list.get(i).toString();
             mCursor = mDBHelper.getFavorite(movieID);
-            Log.i("Tag", movieID);
             if (mCursor != null && mCursor.moveToFirst()) {
-                Log.i("Coloumn Count", "" + mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_POSTER_PATH)));
                 moviePaths.add(mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_POSTER_PATH)));
+                movieIDs.add(mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_MOVIEID)));
 
             }
-            Log.i("MoviePaths", moviePaths + "");
-            mMovieAdapter.clear();
+            if (mMovieAdapter != null) {
+                mMovieAdapter.clear();
+            }
             mFavoriteAdapter = new FavoriteAdapter(getActivity(), moviePaths);
             mGridView.setAdapter(mFavoriteAdapter);
             mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Log.i("MoviePaths", adapterView.getItemAtPosition(i) + "");
-
+                    movieIDs.get(i).toString();
+                    Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+                    intent.putExtra("MOVIEID", movieIDs.get(i).toString());
+                    startActivity(intent);
                 }
             });
             mFavoriteAdapter.notifyDataSetChanged();
@@ -172,6 +179,13 @@ public class MovieFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }
