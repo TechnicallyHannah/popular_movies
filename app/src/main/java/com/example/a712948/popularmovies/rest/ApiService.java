@@ -11,11 +11,11 @@ import retrofit.http.Path;
  * @since 9/10/15.
  */
 public interface ApiService {
-    @GET("/discover/movie?sorted_by=vote_average.asc&api_key=")
+    @GET("/discover/movie?sorted_by=vote_average.asc&api_key=fc47e47a86969055486f846572f8bf83")
     void getContent(Callback<Movies> callback);
-    @GET("/movie/top_rated?api_key=")
+    @GET("/movie/top_rated?api_key=fc47e47a86969055486f846572f8bf83")
     void getTopRated(Callback<Movies> callback);
-    @GET("/movie/{id}?api_key=&append_to_response=trailers,reviews")
+    @GET("/movie/{id}?api_key=fc47e47a86969055486f846572f8bf83&append_to_response=trailers,reviews")
     void getDetails(@Path("id") String id, Callback<MovieDetail> callback);
 
 }

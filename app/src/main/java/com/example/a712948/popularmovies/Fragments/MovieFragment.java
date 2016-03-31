@@ -59,6 +59,7 @@ public class MovieFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_share).setVisible(false);
     }
 
     @Override
@@ -66,6 +67,7 @@ public class MovieFragment extends Fragment {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
         if (id == R.id.action_toprate) {
             if (!mNetwork) {
@@ -83,9 +85,9 @@ public class MovieFragment extends Fragment {
             }
         }
         if (id == R.id.action_fav) {
-            //TODO: add fav here
             updateFav();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
