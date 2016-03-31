@@ -1,4 +1,4 @@
-package com.example.a712948.popularmovies;
+package com.example.a712948.popularmovies.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.example.a712948.popularmovies.DBHelper;
 import com.example.a712948.popularmovies.POJO.*;
+import com.example.a712948.popularmovies.R;
 import com.example.a712948.popularmovies.rest.RestClient;
 import com.squareup.picasso.Picasso;
 import retrofit.Callback;

@@ -1,4 +1,4 @@
-package com.example.a712948.popularmovies;
+package com.example.a712948.popularmovies.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.InjectView;
+import com.example.a712948.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

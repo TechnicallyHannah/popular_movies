@@ -1,4 +1,4 @@
-package com.example.a712948.popularmovies;
+package com.example.a712948.popularmovies.Adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.example.a712948.popularmovies.POJO.Youtube;
+import com.example.a712948.popularmovies.R;
 
 import java.util.List;
 

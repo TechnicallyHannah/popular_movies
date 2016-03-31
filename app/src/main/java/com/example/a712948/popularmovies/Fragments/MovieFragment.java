@@ -1,4 +1,4 @@
-package com.example.a712948.popularmovies;
+package com.example.a712948.popularmovies.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,13 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+import com.example.a712948.popularmovies.Adapters.FavoriteAdapter;
+import com.example.a712948.popularmovies.Adapters.MovieAdapter;
+import com.example.a712948.popularmovies.DBHelper;
+import com.example.a712948.popularmovies.Activities.MovieDetailActivity;
 import com.example.a712948.popularmovies.POJO.Movies;
 import com.example.a712948.popularmovies.POJO.Result;
+import com.example.a712948.popularmovies.R;
 import com.example.a712948.popularmovies.rest.RestClient;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -63,13 +68,13 @@ public class MovieFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_toprate) {
-            if(!mNetwork){
+            if (!mNetwork) {
                 Toast.makeText(getActivity().getApplicationContext(), "You are offline", Toast.LENGTH_SHORT).show();
             }
             updateMoviesHighRate();
         }
         if (id == R.id.action_pop) {
-            if(!mNetwork){
+            if (!mNetwork) {
                 Toast.makeText(getActivity().getApplicationContext(), "You are offline", Toast.LENGTH_SHORT).show();
             }
             updatePopularMovies();
