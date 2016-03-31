@@ -1,4 +1,4 @@
-package com.example.a712948.popularmovies;
+package com.example.a712948.popularmovies.POJO;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,4 +1,4 @@
-package com.example.a712948.popularmovies;
+package com.example.a712948.popularmovies.Adapters;
 
 import android.content.Context;
 import android.util.Log;

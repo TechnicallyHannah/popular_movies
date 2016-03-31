@@ -1,7 +1,10 @@
-package com.example.a712948.popularmovies;
+package com.example.a712948.popularmovies.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.example.a712948.popularmovies.DBHelper;
 import com.example.a712948.popularmovies.POJO.*;
+import com.example.a712948.popularmovies.R;
 import com.example.a712948.popularmovies.rest.RestClient;
 import com.squareup.picasso.Picasso;
 import retrofit.Callback;
@@ -70,15 +75,22 @@ public class MovieDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.setRetainInstance(true);
+
         View view = inflater.inflate(R.layout.fragment_movie_detail, null);
         ButterKnife.inject(this, view);
         Intent intent = getActivity().getIntent();
         mydb = new DBHelper(getActivity());
         mMovieID = intent.getStringExtra(MOVIE_ID);
         Log.i("DB", mydb.getDatabaseName());
-        getDetails(mMovieID);
         trailerView = (ViewGroup) view.findViewById(R.id.trailer_container);
         reviewView = (ViewGroup) view.findViewById(R.id.review_container);
+
+
+        if (!isNetworkAvailable()) {
+            updateFav(mMovieID);
+        } else {
+            getDetails(mMovieID);
+        }
         return view;
     }
 
@@ -116,13 +128,13 @@ public class MovieDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ArrayList array_list = mydb.getAllFavorites();
-                Log.i("arrayList", ""+array_list);
+                Log.i("arrayList", "" + array_list);
                 if (!array_list.contains(mMovieID)) {
                     fav_text_view.setText("Fav");
-                    if (mydb.insertFavorite(mMovieDetail.getId().toString(), mMovieDetail.getPosterPath(), mMovieDetail.getOverview(), mMovieDetail.getReleaseDate(), mMovieDetail.getVoteAverage())) {
+                    if (mydb.insertFavorite(mMovieDetail.getId().toString(), mMovieDetail.getTitle(), mMovieDetail.getPosterPath(), mMovieDetail.getOverview(), mMovieDetail.getReleaseDate(), mMovieDetail.getVoteAverage())) {
                         Toast.makeText(getActivity().getApplicationContext(), "Favorited", Toast.LENGTH_SHORT).show();
                     }
-                }else {
+                } else {
                     fav_text_view.setText("unFav");
                     mydb.removeFavorite(mMovieID);
                     Log.i("REmove Fav", mydb.getAllFavorites() + "");
@@ -163,5 +175,36 @@ public class MovieDetailFragment extends Fragment {
             review_author.setText(firstReview.get(0).getAuthor());
             review_text.setText(firstReview.get(0).getContent());
         }
+    }
+
+    private void updateFav(String movieID) {
+        //title, poster, synopsis, user rating, release date
+        String movieSummary = null;
+        String movieTitle = null;
+        String movieRating = null;
+        String releaseDate = null;
+
+        mCursor = mydb.getFavorite(movieID);
+        if (mCursor != null && mCursor.moveToFirst()) {
+            movieTitle = mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_MOVIE_TITLE));
+            movieSummary = mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_SUMMARY));
+            movieRating = mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_RATE));
+            releaseDate = mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_POSTER_RELEASE));
+        }
+        getActivity().setTitle(movieTitle);
+        summary_text_view.setText(movieSummary);
+        rate_text_view.setText(movieRating);
+        release_text_view.setText(releaseDate);
+        poster_view.setBackgroundResource(R.drawable.ic_action_placeholder);
+        poster_view.setMinimumHeight(350);
+        poster_view.setMinimumWidth(250);
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
