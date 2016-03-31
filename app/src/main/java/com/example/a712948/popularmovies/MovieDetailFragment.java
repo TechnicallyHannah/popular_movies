@@ -21,6 +21,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -114,7 +115,9 @@ public class MovieDetailFragment extends Fragment {
         fav_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mydb.getFavorite(mMovieID) == null) {
+                ArrayList array_list = mydb.getAllFavorites();
+                Log.i("arrayList", ""+array_list);
+                if (!array_list.contains(mMovieID)) {
                     fav_text_view.setText("Fav");
                     if (mydb.insertFavorite(mMovieDetail.getId().toString(), mMovieDetail.getPosterPath(), mMovieDetail.getOverview(), mMovieDetail.getReleaseDate(), mMovieDetail.getVoteAverage())) {
                         Toast.makeText(getActivity().getApplicationContext(), "Favorited", Toast.LENGTH_SHORT).show();
