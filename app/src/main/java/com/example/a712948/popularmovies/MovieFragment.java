@@ -15,6 +15,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,9 @@ import java.util.List;
 public class MovieFragment extends Fragment {
     public static final String PREFS_NAME = "FAV_PREFS";
     public MovieAdapter mMovieAdapter;
+    public FavoriteAdapter mFavoriteAdapter;
     public List<Result> mMovies;
+    GridView mGridView;
     DBHelper mDBHelper;
     Cursor mCursor;
 
@@ -73,36 +76,32 @@ public class MovieFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
-        updateMovies(view);
+        updatePopularMovies();
+        ArrayList array_list = mDBHelper.getAllFavorites();
+        mGridView = (GridView) view.findViewById(R.id.gridview_movies);
+        Log.i("tag", array_list + "");
         return view;
     }
 
 
-    private void updateMovies(final View view) {
-        RestClient.get().getContent(new Callback<Movies>() {
+    private void updateMovies(final View view, List<Result> movies) {
+        if(mFavoriteAdapter !=null){
+            mFavoriteAdapter.clear();
+        }
+        mMovies = movies;
+        mMovieAdapter = new MovieAdapter(getActivity(), mMovies);
+        mGridView.setAdapter(mMovieAdapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void success(Movies movies, Response response) {
-                mMovies = movies.results;
-                mMovieAdapter = new MovieAdapter(getActivity(), mMovies);
-                GridView gridView = (GridView) view.findViewById(R.id.gridview_movies);
-                gridView.setAdapter(mMovieAdapter);
-                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Result movieClicked = (Result) adapterView.getItemAtPosition(i);
-                        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                        intent.putExtra("MOVIEID", movieClicked.getId());
-                        startActivity(intent);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Result movieClicked = (Result) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+                intent.putExtra("MOVIEID", movieClicked.getId());
+                startActivity(intent);
 
-                    }
-                });
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Tag", " Error : " + error);
             }
         });
+        mMovieAdapter.notifyDataSetChanged();
 
     }
 
@@ -110,13 +109,8 @@ public class MovieFragment extends Fragment {
         RestClient.get().getTopRated(new Callback<Movies>() {
             @Override
             public void success(Movies movies, Response response) {
-                if (!mMovies.isEmpty()) {
-                    mMovieAdapter.clear();
-                    mMovieAdapter.addAll(movies.results);
-                    mMovieAdapter.notifyDataSetChanged();
-                }
+                updateMovies(getView(), movies.results);
             }
-
             @Override
             public void failure(RetrofitError error) {
                 Log.i("Tag", " Error : " + error);
@@ -129,11 +123,7 @@ public class MovieFragment extends Fragment {
         RestClient.get().getContent(new Callback<Movies>() {
             @Override
             public void success(Movies movies, Response response) {
-                if (!mMovies.isEmpty()) {
-                    mMovieAdapter.clear();
-                    mMovieAdapter.addAll(movies.results);
-                    mMovieAdapter.notifyDataSetChanged();
-                }
+                updateMovies(getView(), movies.results);
             }
 
             @Override
@@ -148,7 +138,30 @@ public class MovieFragment extends Fragment {
 //
 //        Intent intent = new Intent(getActivity(), FavoriteActivity.class);
 //        startActivity(intent);
+        ArrayList array_list = mDBHelper.getAllFavorites();
+        ArrayList<String> moviePaths = new ArrayList();
+        for (int i = 0; i < array_list.size(); i++) {
+            final String movieID = array_list.get(i).toString();
+            mCursor = mDBHelper.getFavorite(movieID);
+            Log.i("Tag", movieID);
+            if (mCursor != null && mCursor.moveToFirst()) {
+                Log.i("Coloumn Count", "" + mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_POSTER_PATH)));
+                moviePaths.add(mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_POSTER_PATH)));
 
+            }
+            Log.i("MoviePaths", moviePaths + "");
+            mMovieAdapter.clear();
+            mFavoriteAdapter = new FavoriteAdapter(getActivity(), moviePaths);
+            mGridView.setAdapter(mFavoriteAdapter);
+            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Log.i("MoviePaths", adapterView.getItemAtPosition(i) + "");
+
+                }
+            });
+            mFavoriteAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
