@@ -3,7 +3,7 @@
           package="com.example.a712948.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
             android:allowBackup="true"
@@ -23,6 +23,7 @@
         <activity
                 android:name=".Activities.MovieDetailActivity"
                 android:label="@string/title_activity_movie_detail">
+
         </activity>
     </application>
 

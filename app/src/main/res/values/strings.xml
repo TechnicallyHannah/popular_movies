@@ -5,6 +5,8 @@
     <string name="action_Pop">Popular Movies</string>
     <string name="action_toprate">Top Rated Movies</string>
     <string name="action_fav">Favorites</string>
+    <string name="action_share">Share</string>
+    <string name="action_share_trailer">Share Trailer</string>
     <string name="title_activity_movie_detail">MovieDetail</string>
     <string name="trailer_title">Trailers:</string>
 

@@ -8,10 +8,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +33,7 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailFragment extends Fragment {
+    private Toolbar mToolbar;
     //Todo make loading screen
     private final String MOVIE_ID = "MOVIEID";
     public static final String PREFS_NAME = "FAV_PREFS";
@@ -70,6 +70,15 @@ public class MovieDetailFragment extends Fragment {
     ViewGroup trailerView;
     ViewGroup reviewView;
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            return;
+        }
+        // Add this line in order for this fragment to handle menu events.
+        this.setRetainInstance(true);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +101,21 @@ public class MovieDetailFragment extends Fragment {
             getDetails(mMovieID);
         }
         return view;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            shareTextUrl();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -211,5 +235,18 @@ public class MovieDetailFragment extends Fragment {
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void shareTextUrl() {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        // Add data to the intent, the receiving app will decide
+        // what to do with it.
+        share.putExtra(Intent.EXTRA_SUBJECT, mMovieDetail.getTitle());
+        share.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + mMovieDetail.getTrailers().getYoutube().get(0).getSource());
+
+        startActivity(Intent.createChooser(share, "Share Movie Trailer!"));
     }
 }
