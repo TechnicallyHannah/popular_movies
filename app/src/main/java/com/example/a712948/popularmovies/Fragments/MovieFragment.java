@@ -12,10 +12,10 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+import com.example.a712948.popularmovies.Activities.MovieDetails;
 import com.example.a712948.popularmovies.Adapters.FavoriteAdapter;
 import com.example.a712948.popularmovies.Adapters.MovieAdapter;
 import com.example.a712948.popularmovies.DBHelper;
-import com.example.a712948.popularmovies.Activities.MovieDetails;
 import com.example.a712948.popularmovies.POJO.Movies;
 import com.example.a712948.popularmovies.POJO.Result;
 import com.example.a712948.popularmovies.R;
@@ -50,9 +50,9 @@ public class MovieFragment extends Fragment {
         if (savedInstanceState != null) {
             return;
         }
-        // Add this line in order for this fragment to handle menu events.
-        this.setRetainInstance(true);
-        setHasOptionsMenu(true);
+//        // Add this line in order for this fragment to handle menu events.
+//        this.setRetainInstance(true);
+//        setHasOptionsMenu(true);
         mDBHelper = new DBHelper(getActivity());
     }
 
@@ -93,7 +93,8 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
+     //   ButterKnife.inject(this, view);
         mGridView = (GridView) view.findViewById(R.id.gridview_movies);
         mNetwork = isNetworkAvailable();
         if (!mNetwork) {
@@ -188,11 +189,6 @@ public class MovieFragment extends Fragment {
             });
             mFavoriteAdapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     @Override

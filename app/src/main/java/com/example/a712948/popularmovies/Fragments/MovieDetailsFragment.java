@@ -82,11 +82,8 @@ public class MovieDetailsFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         mydb = new DBHelper(getActivity());
         mMovieID = intent.getStringExtra(MOVIE_ID);
-        Log.i("DB", mydb.getDatabaseName());
         trailerView = (ViewGroup) view.findViewById(R.id.trailer_container);
         reviewView = (ViewGroup) view.findViewById(R.id.review_container);
-
-
         if (!isNetworkAvailable()) {
             updateFav(mMovieID);
         } else {
