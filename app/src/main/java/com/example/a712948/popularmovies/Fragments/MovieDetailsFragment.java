@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,11 +30,10 @@ import retrofit.client.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MovieDetailFragment extends Fragment {
+public class MovieDetailsFragment extends Fragment {
     private Toolbar mToolbar;
     //Todo make loading screen
     private final String MOVIE_ID = "MOVIEID";
@@ -47,10 +48,6 @@ public class MovieDetailFragment extends Fragment {
     MovieDetail mMovieDetail;
     private DBHelper mydb;
     Cursor mCursor;
-
-    public MovieDetailFragment() {
-        super();
-    }
 
     @InjectView(R.id.movie_summary_text)
     TextView summary_text_view;
@@ -70,22 +67,17 @@ public class MovieDetailFragment extends Fragment {
     ViewGroup trailerView;
     ViewGroup reviewView;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            return;
-        }
-        // Add this line in order for this fragment to handle menu events.
-        this.setRetainInstance(true);
-        setHasOptionsMenu(true);
+
+    public MovieDetailsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         this.setRetainInstance(true);
 
-        View view = inflater.inflate(R.layout.fragment_movie_detail, null);
+        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.inject(this, view);
         Intent intent = getActivity().getIntent();
         mydb = new DBHelper(getActivity());
@@ -101,23 +93,7 @@ public class MovieDetailFragment extends Fragment {
             getDetails(mMovieID);
         }
         return view;
-
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        int id = item.getItemId();
-        if (id == R.id.action_share) {
-            shareTextUrl();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 
     private void getDetails(String mMovieID) {
         RestClient.get().getDetails(mMovieID, new Callback<MovieDetail>() {
@@ -220,7 +196,7 @@ public class MovieDetailFragment extends Fragment {
             movieRating = mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_RATE));
             releaseDate = mCursor.getString(mCursor.getColumnIndex(DBHelper.FAVORITES_COLUMN_POSTER_RELEASE));
         }
-        getActivity().setTitle(movieTitle);
+        // getActivity().setTitle(movieTitle);
         summary_text_view.setText(movieSummary);
         rate_text_view.setText(movieRating);
         release_text_view.setText(releaseDate);

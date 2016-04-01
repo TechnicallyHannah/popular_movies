@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.example.a712948.popularmovies.Adapters.FavoriteAdapter;
 import com.example.a712948.popularmovies.Adapters.MovieAdapter;
 import com.example.a712948.popularmovies.DBHelper;
-import com.example.a712948.popularmovies.Activities.MovieDetailActivity;
+import com.example.a712948.popularmovies.Activities.MovieDetails;
 import com.example.a712948.popularmovies.POJO.Movies;
 import com.example.a712948.popularmovies.POJO.Result;
 import com.example.a712948.popularmovies.R;
@@ -58,8 +58,8 @@ public class MovieFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.action_share).setVisible(false);
     }
 
     @Override
@@ -67,7 +67,6 @@ public class MovieFragment extends Fragment {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
         int id = item.getItemId();
         if (id == R.id.action_toprate) {
             if (!mNetwork) {
@@ -81,7 +80,6 @@ public class MovieFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "You are offline", Toast.LENGTH_SHORT).show();
             } else {
                 updatePopularMovies();
-
             }
         }
         if (id == R.id.action_fav) {
@@ -90,6 +88,7 @@ public class MovieFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -118,7 +117,7 @@ public class MovieFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Result movieClicked = (Result) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+                Intent intent = new Intent(getActivity(), MovieDetails.class);
                 intent.putExtra("MOVIEID", movieClicked.getId());
                 startActivity(intent);
 
@@ -182,7 +181,7 @@ public class MovieFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     movieIDs.get(i).toString();
-                    Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+                    Intent intent = new Intent(getActivity(), MovieDetails.class);
                     intent.putExtra("MOVIEID", movieIDs.get(i).toString());
                     startActivity(intent);
                 }
