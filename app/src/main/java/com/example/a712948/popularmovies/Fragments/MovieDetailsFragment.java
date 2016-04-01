@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,12 +34,8 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailsFragment extends Fragment {
-    private Toolbar mToolbar;
     //Todo make loading screen
     private final String MOVIE_ID = "MOVIEID";
-    public static final String PREFS_NAME = "FAV_PREFS";
-    public static final String FAVORITES = "Movie_Favorite";
-    int id_to_ = 0;
 
     List<Genre> mGenres;
     Trailers mTrailers;
@@ -69,6 +65,17 @@ public class MovieDetailsFragment extends Fragment {
 
 
     public MovieDetailsFragment() {
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            return;
+        }
+//        // Add this line in order for this fragment to handle menu events.
+//        this.setRetainInstance(true);
+        setHasOptionsMenu(true);
+        // mDBHelper = new DBHelper(getActivity());
     }
 
     @Override
@@ -221,5 +228,19 @@ public class MovieDetailsFragment extends Fragment {
         share.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + mMovieDetail.getTrailers().getYoutube().get(0).getSource());
 
         startActivity(Intent.createChooser(share, "Share Movie Trailer!"));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            shareTextUrl();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

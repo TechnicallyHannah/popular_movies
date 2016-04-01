@@ -52,7 +52,7 @@ public class MovieFragment extends Fragment {
         }
 //        // Add this line in order for this fragment to handle menu events.
 //        this.setRetainInstance(true);
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
         mDBHelper = new DBHelper(getActivity());
     }
 
