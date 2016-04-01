@@ -51,7 +51,7 @@ public class MovieFragment extends Fragment {
             return;
         }
 //        // Add this line in order for this fragment to handle menu events.
-//        this.setRetainInstance(true);
+        this.setRetainInstance(true);
         setHasOptionsMenu(true);
         mDBHelper = new DBHelper(getActivity());
     }
@@ -60,6 +60,7 @@ public class MovieFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_share).setVisible(false);
     }
 
     @Override
@@ -94,7 +95,7 @@ public class MovieFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
-     //   ButterKnife.inject(this, view);
+        //   ButterKnife.inject(this, view);
         mGridView = (GridView) view.findViewById(R.id.gridview_movies);
         mNetwork = isNetworkAvailable();
         if (!mNetwork) {

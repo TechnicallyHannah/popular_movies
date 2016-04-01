@@ -9,10 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,17 +69,38 @@ public class MovieDetailsFragment extends Fragment {
         if (savedInstanceState != null) {
             return;
         }
-//        // Add this line in order for this fragment to handle menu events.
-//        this.setRetainInstance(true);
+        // Add this line in order for this fragment to handle menu events.
+        this.setRetainInstance(true);
         setHasOptionsMenu(true);
-        // mDBHelper = new DBHelper(getActivity());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_toprate).setVisible(false);
+        menu.findItem(R.id.action_pop).setVisible(false);
+        menu.findItem(R.id.action_fav).setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            shareTextUrl();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        this.setRetainInstance(true);
 
         View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.inject(this, view);
@@ -228,19 +246,5 @@ public class MovieDetailsFragment extends Fragment {
         share.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + mMovieDetail.getTrailers().getYoutube().get(0).getSource());
 
         startActivity(Intent.createChooser(share, "Share Movie Trailer!"));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        int id = item.getItemId();
-        if (id == R.id.action_share) {
-            shareTextUrl();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
